@@ -1,26 +1,31 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div  class="common-layout"> 
+    <el-container>
+      <el-header>
+        <TRMenu></TRMenu>
+      </el-header>
+
+
+      <el_main>
+        <TRTabs></TRTabs>
+      </el_main>
+
+      <el-footer>
+
+      </el-footer>
+    </el-container>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TRMenu from './components/TRMenu.vue';
+import TRTabs from './components/TRTabs.vue';
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  components: { TRMenu,TRTabs },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
