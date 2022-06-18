@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="10">
-      <el-table :data="tableData">
+      <el-table :data="tableData" stripe border height="250">
         <el-table-column prop="date" label="Date" width="180" />
         <el-table-column prop="name" label="Name" width="180" />
         <el-table-column prop="address" label="Address" />
@@ -10,33 +10,78 @@
 
     <el-col :span="10">
       <el-calendar v-model="value" />
+
+      <div id="button">
+        <el-button @click="skip('preYear')" type="primary" round size="mini"
+          ><i class="el-icon-arrow-left"></i>年
+        </el-button>
+        <el-button @click="skip('preMonth')" type="warning" round size="mini"
+          ><i class="el-icon-arrow-left"></i>月
+        </el-button>
+        <el-button @click="skip('preDay')" type="success" round size="mini"
+          ><i class="el-icon-arrow-left"></i>日
+        </el-button>
+        <el-button @click="skip('today')" type="info" round size="mini"
+          >今天</el-button
+        >
+        <el-button @click="skip('postDay')" type="success" round size="mini"
+          >日<i class="el-icon-arrow-right"></i>
+        </el-button>
+        <el-button @click="skip('postMonth')" type="warning" round size="mini"
+          >月<i class="el-icon-arrow-right"></i>
+        </el-button>
+        <el-button @click="skip('postYear')" type="primary" round size="mini"
+          >年<i class="el-icon-arrow-right"></i>
+        </el-button>
+      </div>
+
       <el-row>
         开始时间：
-        <el-time-picker
-          v-model="beginTime"
-          :disabled-hours="disabledHours"
-          :disabled-minutes="disabledMinutes"
-          :disabled-seconds="disabledSeconds"
-          placeholder="Arbitrary time"
-        />
+        <el-time-picker v-model="beginTime" format="HH:mm" />
       </el-row>
 
       <el-row>
         结束时间：
-        <el-time-picker
-          v-model="endTime"
-          :disabled-hours="disabledHours"
-          :disabled-minutes="disabledMinutes"
-          :disabled-seconds="disabledSeconds"
-          placeholder="Arbitrary time"
-        />
+        <el-time-picker v-model="endTime" format="HH:mm" />
+      </el-row>
+
+      <el-row>
+        一级标签：
+        <el-select v-model="firstLabelChoose" class="m-2" size="large">
+          <el-option
+            v-for="item in fisrtLabels"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-row>
+
+      <el-row>
+        二级标签：
+        <el-select v-model="secondLabelChoose" class="m-2" size="large">
+          <el-option
+            v-for="item in secondLabels"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-row>
+
+      <el-row>
+        <el-col span="20"> 备注：<el-input v-model="timeNote" /> </el-col>
+      </el-row>
+
+      <el-row>
+        <el-button type="primary">添加</el-button>
+        <el-button type="primary">复制当日记录到表格</el-button>
       </el-row>
     </el-col>
   </el-row>
 </template>
 
 <script>
-
 export default {
   name: "TRRecord",
   data() {
@@ -63,19 +108,120 @@ export default {
           address: "No. 189, Grove St, Los Angeles",
         },
       ],
-      beginTime: '',        //用户输入的开始时间
-      endTime: '',          //用户输入的结束时间
-      firstLabelChoose: '', //用户选择的一级标签
-      secondLabelChoose: '', //用户选择的二级标签
-      fisrtLabels: [],      //标签表里的所有一级标签，用于填充下拉框
-      secondLabels: []      //标签表里所有的二级标签，用于填充下拉框
+      beginTime: "", //用户输入的开始时间
+      endTime: "", //用户输入的结束时间
+      firstLabelChoose: "", //用户选择的一级标签
+      secondLabelChoose: "", //用户选择的二级标签
+      timeNote: "", // 用户输入的时间备注
+      fisrtLabels: [
+        {
+          label: "睡眠",
+          value: "睡眠",
+        },
+      ], //标签表里的所有一级标签，用于填充下拉框
+      secondLabels: [
+        {
+          label: "午睡",
+          value: "午睡",
+        },
+      ], //标签表里所有的二级标签，用于填充下拉框
     };
   },
+  methods: {
+    skip(flag) {
+      if (flag === 'preYear') this.value = new Date(this.value.setFullYear(this.value.getFullYear() - 1));
+      else if (flag === 'preMonth') this.value = new Date(this.value.setMonth(this.value.getMonth() - 1));
+      else if (flag === 'preDay') this.value = new Date(this.value.setDate(this.value.getDate() - 1));
+      else if (flag === 'today') this.value = new Date();
+      else if (flag === 'postDay') this.value = new Date(this.value.setDate(this.value.getDate() + 1));
+      else if (flag === 'postMonth') this.value = new Date(this.value.setMonth(this.value.getMonth() + 1));
+      else if (flag === 'postYear') this.value = new Date(this.value.setFullYear(this.value.getFullYear() + 1));
+    },
+  }
 };
 </script>
 
-<style scoped>
-el-calendar {
-  width: 70%;
+<style lang="less" scoped>
+::v-deep .el-calendar__header {
+  // 修改头部背景颜色
+  background-color: #57617c;
+  padding: 3px 5px;
+  border: none;
+  display: flex;
+  justify-content: center;
+
+  .el-calendar__button-group {
+    // 隐藏原生按钮
+    display: none;
+  }
+
+  .el-calendar__title {
+    // 修改头部标题的字体颜色
+    color: white !important;
+    font-size: 18px;
+    font-weight: bolder;
+  }
+}
+
+::v-deep .el-calendar__body {
+  // 修改主题部分
+  padding: 0;
+}
+
+::v-deep .el-calendar-table {
+  thead {
+    th {
+      // 修改头部星期部分
+      padding: 0;
+      background-color: #57617c;
+      color: white;
+    }
+  }
+
+  .is-selected {
+    .el-calendar-day {
+      p {
+        // 选中日期颜色
+        color: black;
+      }
+    }
+  }
+
+  .el-calendar-day {
+    // 每天小块样式设置
+    padding: 0;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    p {
+      // 所有日期颜色
+      color: black;
+      z-index: 1;
+      user-select: none;
+      display: flex;
+    }
+  }
+}
+
+::v-deep .el-calendar-table__row {
+  .prev,
+  .next {
+    // 修改非本月
+    .el-calendar-day {
+      p {
+        color: #f0d9d5;
+      }
+    }
+  }
+
+  td {
+    // 修改每一个日期td标签
+    &:first-child,
+    &:last-child {
+      background-color: #f5f5f5;
+    }
+  }
 }
 </style>
