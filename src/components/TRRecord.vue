@@ -9,30 +9,16 @@
     </el-col>
 
     <el-col :span="10">
-      <el-calendar v-model="value" />
+      <el-calendar v-model="dayChoose" />
 
       <div id="button">
-        <el-button @click="skip('preYear')" type="primary" round size="mini"
-          ><i class="el-icon-arrow-left"></i>年
-        </el-button>
-        <el-button @click="skip('preMonth')" type="warning" round size="mini"
-          ><i class="el-icon-arrow-left"></i>月
-        </el-button>
-        <el-button @click="skip('preDay')" type="success" round size="mini"
-          ><i class="el-icon-arrow-left"></i>日
-        </el-button>
-        <el-button @click="skip('today')" type="info" round size="mini"
-          >今天</el-button
-        >
-        <el-button @click="skip('postDay')" type="success" round size="mini"
-          >日<i class="el-icon-arrow-right"></i>
-        </el-button>
-        <el-button @click="skip('postMonth')" type="warning" round size="mini"
-          >月<i class="el-icon-arrow-right"></i>
-        </el-button>
-        <el-button @click="skip('postYear')" type="primary" round size="mini"
-          >年<i class="el-icon-arrow-right"></i>
-        </el-button>
+        <el-button @click="skip('preYear')" type="primary" round size="small"><i class="el-icon-arrow-left"></i>年</el-button>
+        <el-button @click="skip('preMonth')" type="warning" round size="small"><i class="el-icon-arrow-left"></i>月</el-button>
+        <el-button @click="skip('preDay')" type="success" round size="small"><i class="el-icon-arrow-left"></i>日</el-button>
+        <el-button @click="skip('today')" type="info" round size="small">今天</el-button>
+        <el-button @click="skip('postDay')" type="success" round size="small">日<i class="el-icon-arrow-right"></i></el-button>
+        <el-button @click="skip('postMonth')" type="warning" round size="small">月<i class="el-icon-arrow-right"></i></el-button>
+        <el-button @click="skip('postYear')" type="primary" round size="small">年<i class="el-icon-arrow-right"></i></el-button>
       </div>
 
       <el-row>
@@ -70,7 +56,7 @@
       </el-row>
 
       <el-row>
-        <el-col span="20"> 备注：<el-input v-model="timeNote" /> </el-col>
+        <el-col :span="20"> 备注：<el-input v-model="timeNote" /> </el-col>
       </el-row>
 
       <el-row>
@@ -108,6 +94,7 @@ export default {
           address: "No. 189, Grove St, Los Angeles",
         },
       ],
+      dayChoose: new Date(),
       beginTime: "", //用户输入的开始时间
       endTime: "", //用户输入的结束时间
       firstLabelChoose: "", //用户选择的一级标签
@@ -127,15 +114,20 @@ export default {
       ], //标签表里所有的二级标签，用于填充下拉框
     };
   },
+  watch: {
+    dayChoose(){
+        console.log(this.dayChoose);
+    }
+  },    
   methods: {
     skip(flag) {
-      if (flag === 'preYear') this.value = new Date(this.value.setFullYear(this.value.getFullYear() - 1));
-      else if (flag === 'preMonth') this.value = new Date(this.value.setMonth(this.value.getMonth() - 1));
-      else if (flag === 'preDay') this.value = new Date(this.value.setDate(this.value.getDate() - 1));
-      else if (flag === 'today') this.value = new Date();
-      else if (flag === 'postDay') this.value = new Date(this.value.setDate(this.value.getDate() + 1));
-      else if (flag === 'postMonth') this.value = new Date(this.value.setMonth(this.value.getMonth() + 1));
-      else if (flag === 'postYear') this.value = new Date(this.value.setFullYear(this.value.getFullYear() + 1));
+      if (flag === 'preYear') this.dayChoose = new Date(this.dayChoose.setFullYear(this.dayChoose.getFullYear() - 1));
+      else if (flag === 'preMonth') this.dayChoose = new Date(this.dayChoose.setMonth(this.dayChoose.getMonth() - 1));
+      else if (flag === 'preDay') this.dayChoose = new Date(this.dayChoose.setDate(this.dayChoose.getDate() - 1));
+      else if (flag === 'today') this.dayChoose = new Date();
+      else if (flag === 'postDay') this.dayChoose = new Date(this.dayChoose.setDate(this.dayChoose.getDate() + 1));
+      else if (flag === 'postMonth') this.dayChoose = new Date(this.dayChoose.setMonth(this.dayChoose.getMonth() + 1));
+      else if (flag === 'postYear') this.dayChoose = new Date(this.dayChoose.setFullYear(this.dayChoose.getFullYear() + 1));
     },
   }
 };
