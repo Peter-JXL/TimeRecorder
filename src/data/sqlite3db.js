@@ -1,12 +1,12 @@
 const sqlite3 = require('sqlite3').verbose()
-var fs = require('fs')
+var fs = window.require('fs')
 
 
 let db;
 let dbFileName = 'TimeRecorder.db'
 
 function  isExistsDataBaseFile(){
-    return true;
+    return false;
 }
 
 function InitDb(){

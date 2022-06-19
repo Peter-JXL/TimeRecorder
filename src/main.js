@@ -4,6 +4,7 @@ import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'  //国家化
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import App from './App.vue'
+// import db from './data/sqlite3db'
 
 const app = createApp(App)
 
