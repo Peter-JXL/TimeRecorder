@@ -1,3 +1,4 @@
+//用于初始化数据库文件
 const sqlite3 = require('sqlite3').verbose()
 var fs = require('fs')
 
