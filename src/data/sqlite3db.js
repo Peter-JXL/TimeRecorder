@@ -28,22 +28,21 @@ function InitDb(){
                 console.log('创建数据库成功，准备新建表');
             }
     
-            let createDataTableSql = `CREATE TABLE dataTable(
-                id integer  PRIMARY KEY AUTOINCREMENT,
-                beginTime datetime,
-                endTime datetime,
-                firstLabel text,
-                secondLabel text,
-                timeNote text
-             );`;
-             let createLabelTableSql = `CREATE TABLE labelTable(
-                id integer  PRIMARY KEY AUTOINCREMENT,
-                beginTime datetime,
-                endTime datetime,
-                firstLabel text,
-                secondLabel text,
-                timeNote text
-             );`;
+            let createDataTableSql = `CREATE TABLE [dataTable](
+                [ID] INTEGER PRIMARY KEY AUTOINCREMENT, 
+                [recordDate] DATE, 
+                [beginTime] DATETIME, 
+                [endTime] DATETIME, 
+                [firstLabel] CHAR(50), 
+                [secondLabel] CHAR(50), 
+                [timeNote] CHAR
+              );`;
+             let createLabelTableSql = `CREATE TABLE [labelTable](
+                [ID] INTEGER PRIMARY KEY AUTOINCREMENT, 
+                [firstLabel] CHAR(20), 
+                [secondLabel] CHAR(20), 
+                [timeNote] CHAR
+              );`;
             db.run(createDataTableSql,function(err){
                 if(err){
                     console.error(err)
