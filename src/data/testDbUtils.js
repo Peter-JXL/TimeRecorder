@@ -119,27 +119,42 @@ function statTime(recordDate, beginDate, endDate, firstLabel='all', secondLabel=
 //统计一天当中每个标签所花的时间，其中未记录的作为单独一个标签
 function statOneDayTime(recordDate){
     
-    let oneDayMinutes = 24 * 60 //一天有多少分钟
-    let recordDateMinutes = 0
-    let labelTimeMap = new Map()
-    var data;
+    var oneDayMinutes = 24 * 60 //一天有多少分钟
+    var recordDateMinutes = 0
+    var labelTimeMap = new Map()
     knex.from('dataTable').
     select("ID", "recordDate", 'beginTime', 'endTime', 'firstLabel', 'secondLabel', 'timeNote').
     where('recordDate', 'like', `%${recordDate}%`)
         .then((rows) => {
-            data = rows
+            console.log('length' + rows.length);
             rows.forEach(row => {
-                let beginTime = moment(row['beginTimme'], 'YYYY-MM-DD HH:SS')
-                let endTime = moment(row['endTime'], 'YYYY-MM-DD HH:SS')
-                let timeSpan = endTime.diff(beginTime, 'minute')
-                console.log(`${row['ID']} ${row['recordDate']}  ${row['beginTime']} ${row['endTime']}  ${row['firstLabel']} ${row['secondLabel']}  ${row['timeNote']}`);
+                var firstLabel = row['firstLabel']
+                var beginTime = moment(row['beginTime'], 'YYYY-MM-DD HH:MM')
+                var endTime = moment(row['endTime'], 'YYYY-MM-DD HH:MM')
+                var timeSpan = endTime.diff(beginTime, 'minute', true)
+                // console.log(beginTime.format('YYYY-MM-DD HH:SS'), endTime.format('YYYY-MM-DD HH:SS'), timeSpan);
+                if(labelTimeMap.has(firstLabel)){
+                    labelTimeMap.set(firstLabel, labelTimeMap.get(firstLabel)+timeSpan)
+                }else{
+                    labelTimeMap.set(firstLabel, timeSpan)
+                }
+                recordDateMinutes +=timeSpan
+
+                // console.log(`${row['ID']} ${row['recordDate']}  ${row['beginTime']} ${row['endTime']}  ${row['firstLabel']} ${row['secondLabel']}  ${row['timeNote']}`);
             });
+            console.log(recordDateMinutes);
+            console.log('未记录的时间：',oneDayMinutes - recordDateMinutes);
+            for (var key in mapTest){
+                console.log('???');
+                console.log("属性" + key, "值" + mapTest[key]);
+            }
         })
         .catch((err) => { console.log(err); throw err })
         .finally(() => {
             knex.destroy();
         });
-    return data
+   
+    return labelTimeMap
     
 }
 
@@ -176,4 +191,7 @@ const updateTime = {
 
 
 // updateOneTime(updateTime)
+
+const mapTest = statOneDayTime('2022-06-20')
+
 
