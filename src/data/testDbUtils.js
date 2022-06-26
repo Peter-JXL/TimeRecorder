@@ -18,6 +18,10 @@ function returnLabelTableData() {
     return knex.from('labelTable').select("firstLabel").groupBy('firstLabel')
 }
 
+function returnSeoncdLabel(firstLabel){
+    return knex.from('labelTable').select("secondLabel").where('firstLabel','=', firstLabel)
+}
+
 
 //返回labelTable的所有值
 function returnLabelTableData_test() {
@@ -232,7 +236,17 @@ const updateTime = {
 // })
 
 
-var x = returnLabelTableData()
+// var x = returnLabelTableData()
+// x.then((rows)=>{
+//     console.log('完成了！');
+//     console.log(rows);
+// }).catch((err)=>{
+//     console.log(err);
+// }).finally(() => {
+//     knex.destroy();
+// });
+
+var x = returnSeoncdLabel('学习成长')
 x.then((rows)=>{
     console.log('完成了！');
     console.log(rows);

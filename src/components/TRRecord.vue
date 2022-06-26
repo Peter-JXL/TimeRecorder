@@ -27,15 +27,15 @@
     
       <el-row>
         一级标签：
-        <el-select v-model="firstLabelChoose" class="m-2" size="large">
+        <el-select v-model="firstLabelChoose" class="m-2" size="large" clearable @change="loadSecondLabel">
           <el-option
-            v-for="item in fisrtLabels" :key="item.value" :label="item.label" :value="item.value"/>
+            v-for="item in fisrtLabels" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </el-row><br/>
 
       <el-row>
         二级标签：
-        <el-select v-model="secondLabelChoose" class="m-2" size="large">
+        <el-select v-model="secondLabelChoose" class="m-2" size="large" clearable>
           <el-option
             v-for="item in secondLabels"
             :key="item.value"
@@ -121,6 +121,19 @@ export default {
           this.fisrtLabels.push({
             label:  row['firstLabel'],
             value:  row['firstLabel'],
+          })
+        })
+      })
+    },
+    loadSecondLabel(){
+      console.log('开始填充二级标签');
+      this.secondLabels = this.secondLabels.splice(0, 0)
+      DbUtils.getSecondLabel(this.firstLabelChoose).then((rows)=>{    
+        console.log(rows);
+        rows.forEach( row => {
+          this.secondLabels.push({
+            label:  row['secondLabel'],
+            value:  row['secondLabel']
           })
         })
       })

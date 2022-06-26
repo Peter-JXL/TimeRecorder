@@ -12,6 +12,10 @@ function getFirstLabel(){
 }
 
 
+function getSecondLabel(firstLabel){
+    return knex.from('labelTable').select("secondLabel").where('firstLabel','=', firstLabel)
+}
+
 
 
 
@@ -155,6 +159,7 @@ function statOneDayTime(recordDate) {
 
 export default {
     getFirstLabel,
+    getSecondLabel,
     returnOneDayData,
     insertTime,
     insertLabel,
