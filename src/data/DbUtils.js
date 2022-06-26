@@ -7,18 +7,11 @@ const knex = require('knex')({
 });
 const moment = require( "moment")
 
-var data;
-
-async function getLabelTableData(){
-    data = await knex.from('labelTable').select("*")
-    console.log(data);
-    return data
+function getFirstLabel(){
+     return knex.from('labelTable').select("firstLabel").groupBy('firstLabel')
 }
 
-//返回labelTable的所有值
-async function returnLabelTableData() {
-    data = await knex.from('labelTable').select("*")
-}
+
 
 
 
@@ -30,7 +23,6 @@ function returnOneDayData(recordDate) {
         select("ID", "recordDate", 'beginTime', 'endTime', 'firstLabel', 'secondLabel', 'timeNote').
         where('recordDate', 'like', `%${recordDate}%`)
         .then((rows) => {
-            console.log(`返回${recordDate}的数据,共${rows.length}行`);
             data = rows
             // rows.forEach(row => {
             //     console.log(`${row['ID']} ${row['recordDate']}  ${row['beginTime']} ${row['endTime']}  ${row['firstLabel']} ${row['secondLabel']}  ${row['timeNote']}`);
@@ -162,8 +154,7 @@ function statOneDayTime(recordDate) {
 
 
 export default {
-    getLabelTableData,
-    returnLabelTableData,
+    getFirstLabel,
     returnOneDayData,
     insertTime,
     insertLabel,

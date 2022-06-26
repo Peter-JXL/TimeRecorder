@@ -12,7 +12,7 @@
 
     <el-col :span="10">
       <el-calendar id='customizedCalendar'  v-model="caldayChoose" />
-
+      <br/>
       <div id="button">
         <el-button @click="skip('preYear')" type="primary" round size="small">去年</el-button>
         <el-button @click="skip('preMonth')" type="warning" round size="small">上月</el-button>
@@ -96,12 +96,7 @@ export default {
       firstLabelChoose: "", //用户选择的一级标签
       secondLabelChoose: "", //用户选择的二级标签
       timeNote: "", // 用户输入的时间备注
-      fisrtLabels: [
-        {
-          label: "睡眠",
-          value: "睡眠",
-        },
-      ], //标签表里的所有一级标签，用于填充下拉框
+      fisrtLabels: [], //标签表里的所有一级标签，用于填充下拉框
       secondLabels: [
         {
           label: "午睡",
@@ -120,8 +115,15 @@ export default {
       var data = DbUtils.returnOneDayData(this.caldayChoose)
     },
     loadLabels(){
-      var data = DbUtils.getLabelTableData()
-      console.log('loadLabels',data)
+      this.fisrtLabels = this.fisrtLabels.splice(0, 0)
+      DbUtils.getFirstLabel().then((rows)=>{    
+        rows.forEach( row => {
+          this.fisrtLabels.push({
+            label:  row['firstLabel'],
+            value:  row['firstLabel'],
+          })
+        })
+      })
     },
     skip(flag) {
       if (flag === 'preYear') this.caldayChoose = new Date(this.caldayChoose.setFullYear(this.caldayChoose.getFullYear() - 1));
@@ -136,7 +138,7 @@ export default {
 
     },
     copyOneDayDataToExcel(){
-      
+
     }
   },
   mounted() {

@@ -15,7 +15,7 @@ async function getLabelTableData(){
 
 //返回labelTable的所有值
 function returnLabelTableData() {
-    return knex.select("*").from('labelTable')
+    return knex.from('labelTable').select("firstLabel").groupBy('firstLabel')
 }
 
 
@@ -232,4 +232,12 @@ const updateTime = {
 // })
 
 
- getLabelTableData()
+var x = returnLabelTableData()
+x.then((rows)=>{
+    console.log('完成了！');
+    console.log(rows);
+}).catch((err)=>{
+    console.log(err);
+}).finally(() => {
+    knex.destroy();
+});
