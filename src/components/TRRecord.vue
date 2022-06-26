@@ -11,32 +11,27 @@
     </el-col>
 
     <el-col :span="10">
-      <el-calendar v-model="caldayChoose" />
+      <el-calendar id='customizedCalendar'  v-model="caldayChoose" />
 
       <div id="button">
-        <el-button @click="skip('preYear')" type="primary" round size="small"><i class="el-icon-arrow-left"></i>年</el-button>
-        <el-button @click="skip('preMonth')" type="warning" round size="small"><i class="el-icon-arrow-left"></i>月</el-button>
-        <el-button @click="skip('preDay')" type="success" round size="small"><i class="el-icon-arrow-left"></i>日</el-button>
+        <el-button @click="skip('preYear')" type="primary" round size="small">去年</el-button>
+        <el-button @click="skip('preMonth')" type="warning" round size="small">上月</el-button>
+        <el-button @click="skip('preDay')" type="success" round size="small">昨日</el-button>
         <el-button @click="skip('today')" type="info" round size="small">今天</el-button>
-        <el-button @click="skip('postDay')" type="success" round size="small">日<i class="el-icon-arrow-right"></i></el-button>
-        <el-button @click="skip('postMonth')" type="warning" round size="small">月<i class="el-icon-arrow-right"></i></el-button>
-        <el-button @click="skip('postYear')" type="primary" round size="small">年<i class="el-icon-arrow-right"></i></el-button>
       </div>
-
-      <el-row> 开始时间： <el-time-picker v-model="beginTime" format="HH:mm" /></el-row>
-      <el-row> 结束时间：<el-time-picker v-model="endTime" format="HH:mm" /></el-row>
-
+      <br/>
+      
+      <el-row> 开始时间： <el-time-picker v-model="beginTime" format="HH:mm" /></el-row> <br/>
+      <el-row> 结束时间：<el-time-picker v-model="endTime" format="HH:mm" /></el-row> <br/>
+      
+    
       <el-row>
         一级标签：
         <el-select v-model="firstLabelChoose" class="m-2" size="large">
           <el-option
-            v-for="item in fisrtLabels"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+            v-for="item in fisrtLabels" :key="item.value" :label="item.label" :value="item.value"/>
         </el-select>
-      </el-row>
+      </el-row><br/>
 
       <el-row>
         二级标签：
@@ -48,13 +43,18 @@
             :value="item.value"
           />
         </el-select>
-      </el-row>
-
-      <el-row><el-col :span="20"> 备注：<el-input v-model="timeNote" /> </el-col></el-row>
+      </el-row><br/>
 
       <el-row>
-        <el-button type="primary">添加</el-button>
-        <el-button type="primary">复制当日记录到Excel表格</el-button>
+        <el-input v-model="timeNote" class="w-50 m-2" clearable>
+          <template #prepend>备注</template>
+        </el-input>
+      </el-row><br/>
+      
+
+      <el-row>
+        <el-button type="primary" @click="addOneTime">添加</el-button>
+        <el-button type="primary" @click="copyOneDayDataToExcel">复制当日记录到Excel表格</el-button>        
       </el-row>
     </el-col>
   </el-row>
@@ -132,6 +132,12 @@ export default {
       else if (flag === 'postMonth') this.caldayChoose = new Date(this.caldayChoose.setMonth(this.caldayChoose.getMonth() + 1));
       else if (flag === 'postYear') this.caldayChoose = new Date(this.caldayChoose.setFullYear(this.caldayChoose.getFullYear() + 1));
     },
+    addOneTime(){
+
+    },
+    copyOneDayDataToExcel(){
+      
+    }
   },
   mounted() {
     this.caldayChoose = new Date()
@@ -142,86 +148,96 @@ export default {
 </script>
 
 <style lang="less" scoped>
-::v-deep .el-calendar__header {
-  // 修改头部背景颜色
-  background-color: #57617c;
-  padding: 3px 5px;
-  border: none;
-  display: flex;
-  justify-content: center;
-
-  .el-calendar__button-group {
-    // 隐藏原生按钮
-    display: none;
-  }
-
-  .el-calendar__title {
-    // 修改头部标题的字体颜色
-    color: white !important;
-    font-size: 18px;
-    font-weight: bolder;
-  }
-}
-
-::v-deep .el-calendar__body {
-  // 修改主题部分
-  padding: 0;
-}
-
-::v-deep .el-calendar-table {
-  thead {
-    th {
-      // 修改头部星期部分
-      padding: 0;
-      background-color: #57617c;
-      color: white;
-    }
-  }
-
-  .is-selected {
-    .el-calendar-day {
-      p {
-        // 选中日期颜色
-        color: black;
-      }
-    }
-  }
-
-  .el-calendar-day {
-    // 每天小块样式设置
-    padding: 0;
-    height: 40px;
+#customizedCalendar {
+  ::v-deep .el-calendar__header {
+    // 修改头部背景颜色
+    background-color: #57617c;
+    padding: 3px 5px;
+    border: none;
     display: flex;
     justify-content: center;
-    align-items: center;
 
-    p {
-      // 所有日期颜色
-      color: black;
-      z-index: 1;
-      user-select: none;
-      display: flex;
+    .el-calendar__button-group {
+      // 隐藏原生按钮
+      display: none;
+    }
+
+    .el-calendar__title {
+      // 修改头部标题的字体颜色
+      color: white !important;
+      font-size: 18px;
+      font-weight: bolder;
     }
   }
-}
 
-::v-deep .el-calendar-table__row {
-  .prev,
-  .next {
-    // 修改非本月
+  ::v-deep .el-calendar__body {
+    // 修改主题部分
+    padding: 0;
+  }
+
+  ::v-deep .el-calendar-table {
+    thead {
+      th {
+        // 修改头部星期部分
+        padding: 0;
+        background-color: #57617c;
+        color: white;
+      }
+    }
+
+    .is-selected {
+      .el-calendar-day {
+        p {
+          // 选中日期颜色
+          color: black;
+        }
+      }
+    }
+
     .el-calendar-day {
+      // 每天小块样式设置
+      padding: 0;
+      height: 25px;
+      display: flex;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+
       p {
-        color: #f0d9d5;
+        // 所有日期颜色
+        color: black;
+        z-index: 1;
+        user-select: none;
+        display: flex;
       }
     }
   }
 
-  td {
-    // 修改每一个日期td标签
-    &:first-child,
-    &:last-child {
-      background-color: #f5f5f5;
+  ::v-deep .el-calendar-table__row {
+
+    .prev,
+    .next {
+
+      // 修改非本月
+      .el-calendar-day {
+        p {
+          color: #f0d9d5;
+        }
+      }
+    }
+
+    td {
+
+      // 修改每一个日期td标签
+      &:first-child,
+      &:last-child {
+        background-color: #f5f5f5;
+      }
     }
   }
+  button { 
+    padding: 3px 10px;
+  }
 }
+
 </style>
