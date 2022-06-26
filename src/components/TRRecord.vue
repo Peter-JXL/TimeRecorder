@@ -117,12 +117,11 @@ export default {
   },    
   methods: {
     loadDayTime(){
-      console.log('加载当天数据……');
       var data = DbUtils.returnOneDayData(this.caldayChoose)
     },
     loadLabels(){
-      console.log('加载标签数据……');
-      var data = DbUtils.returnLabelTableData()
+      var data = DbUtils.getLabelTableData()
+      console.log('loadLabels',data)
     },
     skip(flag) {
       if (flag === 'preYear') this.caldayChoose = new Date(this.caldayChoose.setFullYear(this.caldayChoose.getFullYear() - 1));

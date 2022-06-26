@@ -6,21 +6,17 @@ const knex = require('knex')({
     useNullAsDefault: true
 });
 const moment = require("moment")
+var body;
 
+async function getLabelTableData(){
+    body = await returnLabelTableData();
+    console.log(body);
+}
 
 //返回labelTable的所有值
 function returnLabelTableData() {
-    var data;
-    knex.from('labelTable').select("*").then((rows) => {
-        rows.forEach(row => {
-            console.log(`${row['ID']} ${row['firstLabel']} ${row['secondLabel']} ${row['timeNote']}`);
-        });
-    }).catch((err) => { console.log(err); throw err })
-        .finally(() => {
-            knex.destroy();
-            return data
-        });
-    return data
+    console.log('knex是什么', knex.select("*").from('labelTable'));
+    return knex.select("*").from('labelTable')
 }
 
 //返回某一天的所有数据，输入参数为日期
@@ -211,12 +207,13 @@ const updateTime = {
 // updateOneTime(updateTime)
 // statOneDayTime('2022-06-20')
 
-updateLabel({
-    ID: '1',
-    firstLabel: '娱乐',
-    secondLabel: '浏览',
-    timeNote: '浏览 锻炼YJ'
+// updateLabel({
+//     ID: '1',
+//     firstLabel: '娱乐',
+//     secondLabel: '浏览',
+//     timeNote: '浏览 锻炼YJ'
 
-})
+// })
 
 
+ getLabelTableData()

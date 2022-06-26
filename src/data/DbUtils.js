@@ -6,22 +6,21 @@ const knex = require('knex')({
     useNullAsDefault: true
 });
 const moment = require( "moment")
-console.log('Dbutils的路径为: ', __dirname);
 
+var data;
 
-//返回labelTable的所有值
-function returnLabelTableData() {
-    var data;
-    knex.from('labelTable').select("*").then((rows) => {
-        data = rows
-        console.log(`返回labelTable的数据,共${rows.length}行`);
-
-        // rows.forEach(row => {
-        //     console.log(`${row['ID']} ${row['firstLabel']} ${row['secondLabel']} ${row['timeNote']}`);
-        // });
-    }).catch((err) => { console.log(err); throw err })
+async function getLabelTableData(){
+    data = await knex.from('labelTable').select("*")
+    console.log(data);
     return data
 }
+
+//返回labelTable的所有值
+async function returnLabelTableData() {
+    data = await knex.from('labelTable').select("*")
+}
+
+
 
 //返回某一天的所有数据，输入参数为日期
 function returnOneDayData(recordDate) {
@@ -163,6 +162,7 @@ function statOneDayTime(recordDate) {
 
 
 export default {
+    getLabelTableData,
     returnLabelTableData,
     returnOneDayData,
     insertTime,

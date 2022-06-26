@@ -5,7 +5,6 @@ var fs = require('fs')
 
 let db;
 let dbFileName = 'TimeRecorder.db'
-console.log('Initsqlite3db.js当前路径为: ', __dirname);
 
 function CreateDbFileAndTable() {
     console.log('不存在数据库文件，准备新建数据库')
