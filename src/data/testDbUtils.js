@@ -15,8 +15,24 @@ async function getLabelTableData(){
 
 //返回labelTable的所有值
 function returnLabelTableData() {
-    console.log('knex是什么', knex.select("*").from('labelTable'));
     return knex.select("*").from('labelTable')
+}
+
+
+//返回labelTable的所有值
+function returnLabelTableData_test() {
+    var data
+    knex.select("*").from('labelTable').then((rows) => {
+        data = rows
+        rows.forEach(row => {
+            console.log(`${row['ID']} ${row['recordDate']}  ${row['beginTime']} ${row['endTime']}  ${row['firstLabel']} ${row['secondLabel']}  ${row['timeNote']}`);
+        });
+    })
+    .catch((err) => { console.log(err); throw err })
+    .finally(() => {
+        knex.destroy();
+    });
+    return data
 }
 
 //返回某一天的所有数据，输入参数为日期
