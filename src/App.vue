@@ -6,9 +6,9 @@
       </el-header>
 
 
-      <el_main>
+      <el-main>
         <TRTabs></TRTabs>
-      </el_main>
+      </el-main>
 
       <el-footer>
 

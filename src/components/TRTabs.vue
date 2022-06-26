@@ -1,5 +1,5 @@
 <template>
-  <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+  <el-tabs class="demo-tabs">
     <el-tab-pane label="记录时间" name="first">
       <TRRecord></TRRecord>
     </el-tab-pane>

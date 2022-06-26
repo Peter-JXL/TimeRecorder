@@ -1,9 +1,7 @@
 <template>
   <el-menu
-    :default-active="activeIndex"
     class="el-menu-demo"
     mode="horizontal"
-    @select="handleSelect"
   >
     <el-menu-item index="1">文件</el-menu-item>
 
