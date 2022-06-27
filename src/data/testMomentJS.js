@@ -13,3 +13,7 @@ console.log(timeSpan.asMinutes());
 
 let s = t1.format('YYYY-MM-DD ').toString()
 console.log(s);
+
+
+var test = moment('2022-06-22 08:15:00.000')
+console.log(test);

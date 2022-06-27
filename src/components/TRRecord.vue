@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="15">
+    <el-col :span="14">
       <el-table :data="tableData" stripe border height="500" max-height="2000">
         <el-table-column prop="beginTime" label="开始时间" width="150" />
         <el-table-column prop="endTime" label="结束时间" width="150" />
@@ -178,7 +178,7 @@ export default {
 
 <style lang="less" scoped>
 #customizedCalendar {
-  ::v-deep .el-calendar__header {
+  :deep(.el-calendar__header)  {
     // 修改头部背景颜色
     background-color: #57617c;
     padding: 3px 5px;
@@ -199,12 +199,12 @@ export default {
     }
   }
 
-  ::v-deep .el-calendar__body {
+  :deep(.el-calendar__body)  {
     // 修改主题部分
     padding: 0;
   }
 
-  ::v-deep .el-calendar-table {
+  :deep(.el-calendar-table) {
     thead {
       th {
         // 修改头部星期部分
@@ -242,7 +242,7 @@ export default {
     }
   }
 
-  ::v-deep .el-calendar-table__row {
+  :deep(.el-calendar-table__row) {
 
     .prev,
     .next {
