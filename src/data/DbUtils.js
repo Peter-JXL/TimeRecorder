@@ -17,24 +17,12 @@ function getSecondLabel(firstLabel){
 }
 
 
-
-
 //返回某一天的所有数据，输入参数为日期
-function returnOneDayData(recordDate) {
+function getOneDayData(recordDate) {
     recordDate = moment(recordDate).format('YYYY-MM-DD ').toString()
-    var data;
-    knex.from('dataTable').
+    return knex.from('dataTable').
         select("ID", "recordDate", 'beginTime', 'endTime', 'firstLabel', 'secondLabel', 'timeNote').
-        where('recordDate', 'like', `%${recordDate}%`)
-        .then((rows) => {
-            data = rows
-            // rows.forEach(row => {
-            //     console.log(`${row['ID']} ${row['recordDate']}  ${row['beginTime']} ${row['endTime']}  ${row['firstLabel']} ${row['secondLabel']}  ${row['timeNote']}`);
-            // });
-            return data
-        })
-        .catch((err) => { console.log('发生了错误:',err); throw err })
-    
+        where('recordDate', 'like', `%${recordDate}%`).orderBy('beginTime')
 }
 
 //插入一条时间记录
@@ -160,7 +148,7 @@ function statOneDayTime(recordDate) {
 export default {
     getFirstLabel,
     getSecondLabel,
-    returnOneDayData,
+    getOneDayData,
     insertTime,
     insertLabel,
     updateOneTime,

@@ -1,12 +1,12 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="10">
+    <el-col :span="15">
       <el-table :data="tableData" stripe border height="500" max-height="2000">
-        <el-table-column prop="date" label="开始时间" width="100" />
-        <el-table-column prop="name" label="结束时间" width="100" />
-        <el-table-column prop="name" label="一级标签" width="100" />
-        <el-table-column prop="name" label="二级标签" width="100" />
-        <el-table-column prop="name" label="备注" width="100" />
+        <el-table-column prop="beginTime" label="开始时间" width="150" />
+        <el-table-column prop="endTime" label="结束时间" width="150" />
+        <el-table-column prop="firstLabel" label="一级标签" width="100" />
+        <el-table-column prop="secondLabel" label="二级标签" width="100" />
+        <el-table-column prop="timeNote" label="备注" width="200" />
       </el-table>
     </el-col>
 
@@ -112,7 +112,19 @@ export default {
   },    
   methods: {
     loadDayTime(){
-      var data = DbUtils.returnOneDayData(this.caldayChoose)
+      this.tableData = this.tableData.splice(0, 0)
+      DbUtils.getOneDayData(this.caldayChoose).then((rows)=>{
+        rows.forEach(row=>{
+          this.tableData.push({
+            ID: row['id'],
+            beginTime: row['beginTime'],
+            endTime: row['endTime'],
+            firstLabel: row['firstLabel'],
+            secondLabel: row['secondLabel'],
+            timeNote: row['timeNote']
+          })
+        })
+      })
     },
     loadLabels(){
       this.fisrtLabels = this.fisrtLabels.splice(0, 0)
@@ -120,13 +132,12 @@ export default {
         rows.forEach( row => {
           this.fisrtLabels.push({
             label:  row['firstLabel'],
-            value:  row['firstLabel'],
+            value:  row['firstLabel']
           })
         })
       })
     },
     loadSecondLabel(){
-      console.log('开始填充二级标签');
       this.secondLabels = this.secondLabels.splice(0, 0)
       DbUtils.getSecondLabel(this.firstLabelChoose).then((rows)=>{    
         console.log(rows);
@@ -149,8 +160,11 @@ export default {
     },
     addOneTime(){
 
-    },
+    },  
     copyOneDayDataToExcel(){
+
+    },
+    updateOneTime(){
 
     }
   },

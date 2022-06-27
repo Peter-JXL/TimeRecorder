@@ -27,7 +27,6 @@ function returnSeoncdLabel(firstLabel){
 function returnLabelTableData_test() {
     var data
     knex.select("*").from('labelTable').then((rows) => {
-        data = rows
         rows.forEach(row => {
             console.log(`${row['ID']} ${row['recordDate']}  ${row['beginTime']} ${row['endTime']}  ${row['firstLabel']} ${row['secondLabel']}  ${row['timeNote']}`);
         });
@@ -36,7 +35,6 @@ function returnLabelTableData_test() {
     .finally(() => {
         knex.destroy();
     });
-    return data
 }
 
 //返回某一天的所有数据，输入参数为日期
@@ -44,7 +42,7 @@ function returnOneDayData(recordDate) {
     var data;
     knex.from('dataTable').
         select("ID", "recordDate", 'beginTime', 'endTime', 'firstLabel', 'secondLabel', 'timeNote').
-        where('recordDate', 'like', `%${recordDate}%`)
+        where('recordDate', 'like', `%${recordDate}%`).orderBy('beginTime')
         .then((rows) => {
             data = rows
             rows.forEach(row => {
@@ -246,12 +244,15 @@ const updateTime = {
 //     knex.destroy();
 // });
 
-var x = returnSeoncdLabel('学习成长')
-x.then((rows)=>{
-    console.log('完成了！');
-    console.log(rows);
-}).catch((err)=>{
-    console.log(err);
-}).finally(() => {
-    knex.destroy();
-});
+// var x = returnSeoncdLabel('学习成长')
+// x.then((rows)=>{
+//     console.log('完成了！');
+//     console.log(rows);
+// }).catch((err)=>{
+//     console.log(err);
+// }).finally(() => {
+//     knex.destroy();
+// });
+
+
+returnOneDayData('2022-05-20')
