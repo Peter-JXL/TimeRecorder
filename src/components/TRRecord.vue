@@ -1,12 +1,12 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="14">
-      <el-table :data="tableData" stripe border height="500" max-height="2000">
-        <el-table-column prop="beginTime" label="开始时间" width="150" />
-        <el-table-column prop="endTime" label="结束时间" width="150" />
+      <el-table :data="tableData" stripe border height="528" max-height="2000">
+        <el-table-column prop="beginTime" label="开始时间" width="85" />
+        <el-table-column prop="endTime" label="结束时间" width="85" />
         <el-table-column prop="firstLabel" label="一级标签" width="100" />
         <el-table-column prop="secondLabel" label="二级标签" width="100" />
-        <el-table-column prop="timeNote" label="备注" width="200" />
+        <el-table-column prop="timeNote" label="备注" width="120" />
       </el-table>
     </el-col>
 
@@ -62,47 +62,21 @@
 
 <script>
 import DbUtils from '@/data/DbUtils';
-
+import moment from 'moment';
 
 export default {
   name: "TRRecord",
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          date: "2016-05-04",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          date: "2016-05-01",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-      ],
-      caldayChoose: new Date(),
+      tableData: [],
+      caldayChoose:  new Date(),
       beginTime: "", //用户输入的开始时间
       endTime: "", //用户输入的结束时间
       firstLabelChoose: "", //用户选择的一级标签
       secondLabelChoose: "", //用户选择的二级标签
       timeNote: "", // 用户输入的时间备注
       fisrtLabels: [], //标签表里的所有一级标签，用于填充下拉框
-      secondLabels: [
-        {
-          label: "午睡",
-          value: "午睡",
-        },
-      ], //标签表里所有的二级标签，用于填充下拉框
+      secondLabels: [], //标签表里所有的二级标签，用于填充下拉框
     };
   },
   watch: {
@@ -117,8 +91,8 @@ export default {
         rows.forEach(row=>{
           this.tableData.push({
             ID: row['id'],
-            beginTime: row['beginTime'],
-            endTime: row['endTime'],
+            beginTime: moment(row['beginTime']).format('HH:mm'),
+            endTime:  moment(row['endTime']).format('HH:mm'),
             firstLabel: row['firstLabel'],
             secondLabel: row['secondLabel'],
             timeNote: row['timeNote']
