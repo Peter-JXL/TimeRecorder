@@ -21,7 +21,7 @@
       </div>
       <br/>
 
-      <el-form :model="form" label-width="120px">
+      <el-form :model="form" label-width="150px">
        <el-form-item label="开始时间：">
           <el-time-picker v-model="beginTime" format="HH:mm" />
        </el-form-item>
@@ -37,7 +37,7 @@
        </el-form-item>
 
        <el-form-item label="二级标签：">
-          <el-select v-model="secondLabelChoose" class="m-2" size="large" clearable>
+          <el-select v-model="secondLabelChoose" size="large" clearable>
           <el-option
             v-for="item in secondLabels"
             :key="item.value"
@@ -47,21 +47,15 @@
           </el-select>
        </el-form-item>
 
-        <el-form-item label="备注：">
-          <el-input v-model="timeNote" clearable></el-input>
+        <el-form-item label="备注：" >
+          <el-input v-model="timeNote" type="text" clearable  style="width:270px" @input="timeNoteChange"></el-input>
+        </el-form-item>
+
+        <el-form-item >
+            <el-button type="primary" @click="addOneTime">添加</el-button>
+            <el-button type="primary" @click="copyOneDayDataToExcel">复制当日记录到Excel表格</el-button>    
         </el-form-item>
       </el-form>
-      
-
-      <el-row>
-        
-      </el-row><br/>
-      
-
-      <el-row>
-        <el-button type="primary" @click="addOneTime">添加</el-button>
-        <el-button type="primary" @click="copyOneDayDataToExcel">复制当日记录到Excel表格</el-button>        
-      </el-row>
     </el-col>
   </el-row>
 </template>
@@ -119,9 +113,9 @@ export default {
       })
     },
     loadSecondLabel(){
+      this.secondLabelChoose = ''
       this.secondLabels = this.secondLabels.splice(0, 0)
       DbUtils.getSecondLabel(this.firstLabelChoose).then((rows)=>{    
-        console.log(rows);
         rows.forEach( row => {
           this.secondLabels.push({
             label:  row['secondLabel'],
@@ -140,8 +134,25 @@ export default {
       else if (flag === 'postYear') this.caldayChoose = new Date(this.caldayChoose.setFullYear(this.caldayChoose.getFullYear() + 1));
     },
     addOneTime(){
-
+      let obj = {
+        recordDate: moment(this.caldayChoose).format('YYYY-MM-DD'), 
+        beginTime: moment(this.beginTime).format('YYYY-MM-DD HH:mm'), 
+        endTime: moment(this.endTime).format('YYYY-MM-DD HH:mm'), 
+        firstLabel: this.firstLabelChoose, 
+        secondLabel: this.secondLabelChoose,
+        timeNote: this.timeNote
+      }
+      DbUtils.insertTime(obj).then( ()=>{
+          console.log('插入成功');
+         this.loadDayTime(this.caldayChoose)
+      }).catch((err) => {
+        console.log(err);
+        throw err
+      })
     },  
+    timeNoteChange(){
+      console.log(this.timeNote);
+    },
     copyOneDayDataToExcel(){
 
     },

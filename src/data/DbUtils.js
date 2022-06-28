@@ -27,15 +27,7 @@ function getOneDayData(recordDate) {
 
 //插入一条时间记录
 function insertTime(oneTime) {
-    knex('dataTable')
-        .insert(oneTime).then(() => {
-            console.log('insert Success');
-        })
-        .catch((err) => {
-            console.log(err);
-            throw err
-        })
-
+    return knex('dataTable').insert(oneTime)
 }
 
 //插入一条标签

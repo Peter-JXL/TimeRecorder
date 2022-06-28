@@ -255,4 +255,16 @@ const updateTime = {
 // });
 
 
-returnOneDayData('2022-05-20')
+// returnOneDayData('2022-05-20')
+
+
+
+
+insertTime({
+    recordDate: '2022-6-28', 
+    beginTime: '2022-6-28 00:00', 
+    endTime: '2022-6-28 7:50', 
+    firstLabel: '睡眠', 
+    secondLabel: '睡眠',
+    timeNote: '睡眠'
+})
