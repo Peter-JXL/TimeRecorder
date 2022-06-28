@@ -10,7 +10,7 @@
       </el-table>
     </el-col>
 
-    <el-col :span="10">
+    <el-col :span="10">  
       <el-calendar id='customizedCalendar'  v-model="caldayChoose" />
       <br/>
       <div id="button">
@@ -20,35 +20,41 @@
         <el-button @click="skip('today')" type="info" round size="small">今天</el-button>
       </div>
       <br/>
-      
-      <el-row> 开始时间： <el-time-picker v-model="beginTime" format="HH:mm" /></el-row> <br/>
-      <el-row> 结束时间：<el-time-picker v-model="endTime" format="HH:mm" /></el-row> <br/>
-      
-    
-      <el-row>
-        一级标签：
-        <el-select v-model="firstLabelChoose" class="m-2" size="large" clearable @change="loadSecondLabel">
-          <el-option
-            v-for="item in fisrtLabels" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-      </el-row><br/>
 
-      <el-row>
-        二级标签：
-        <el-select v-model="secondLabelChoose" class="m-2" size="large" clearable>
+      <el-form :model="form" label-width="120px">
+       <el-form-item label="开始时间：">
+          <el-time-picker v-model="beginTime" format="HH:mm" />
+       </el-form-item>
+
+       <el-form-item label="结束时间：">
+          <el-time-picker v-model="endTime" format="HH:mm" />
+       </el-form-item>
+
+        <el-form-item label="一级标签：">
+          <el-select v-model="firstLabelChoose" class="m-2" size="large" clearable @change="loadSecondLabel">
+            <el-option v-for="item in fisrtLabels" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+       </el-form-item>
+
+       <el-form-item label="二级标签：">
+          <el-select v-model="secondLabelChoose" class="m-2" size="large" clearable>
           <el-option
             v-for="item in secondLabels"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
-      </el-row><br/>
+          </el-select>
+       </el-form-item>
+
+        <el-form-item label="备注：">
+          <el-input v-model="timeNote" clearable></el-input>
+        </el-form-item>
+      </el-form>
+      
 
       <el-row>
-        <el-input v-model="timeNote" class="w-50 m-2" clearable>
-          <template #prepend>备注</template>
-        </el-input>
+        
       </el-row><br/>
       
 
@@ -77,6 +83,7 @@ export default {
       timeNote: "", // 用户输入的时间备注
       fisrtLabels: [], //标签表里的所有一级标签，用于填充下拉框
       secondLabels: [], //标签表里所有的二级标签，用于填充下拉框
+      form: {}
     };
   },
   watch: {
