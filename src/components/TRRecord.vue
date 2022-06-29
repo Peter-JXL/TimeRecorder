@@ -32,7 +32,7 @@
        </el-form-item>
 
        <el-form-item label="结束时间：">
-          <el-time-picker v-model="endTime" format="HH:mm" />
+          <el-time-picker v-model="endTime" format="HH:mm" @keydown.enter="$refs.timeNote.focus()" />
        </el-form-item>
 
         <el-form-item label="一级标签：">
@@ -53,7 +53,7 @@
        </el-form-item>
 
         <el-form-item label="备注：" >
-          <el-input v-model="timeNote" type="text" clearable  style="width:270px" @input="timeNoteChange"></el-input>
+          <el-input ref="timeNote" v-model="timeNote" type="text" clearable  style="width:270px" @input="timeNoteChange"></el-input>
         </el-form-item>
 
         <el-form-item >
@@ -178,7 +178,7 @@ export default {
         }
       })
       
-    },    
+    },
     copyOneDayDataToExcel(){
 
     },
