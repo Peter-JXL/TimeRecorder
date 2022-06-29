@@ -31,13 +31,13 @@
        </el-form-item>
 
         <el-form-item label="一级标签：">
-          <el-select v-model="firstLabelChoose" class="m-2" size="large" clearable @change="loadSecondLabel">
+          <el-select v-model="firstLabelChoose" class="m-2"  clearable @change="loadSecondLabel">
             <el-option v-for="item in fisrtLabels" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
        </el-form-item>
 
        <el-form-item label="二级标签：">
-          <el-select v-model="secondLabelChoose" size="large" clearable>
+          <el-select v-model="secondLabelChoose"  clearable>
           <el-option
             v-for="item in secondLabels"
             :key="item.value"
@@ -68,21 +68,24 @@ export default {
   name: "TRRecord",
   data() {
     return {
-      tableData: [],
-      caldayChoose:  new Date(),
-      beginTime: "", //用户输入的开始时间
-      endTime: "", //用户输入的结束时间
+      tableData: [],   //一天的时间记录
+      caldayChoose: new Date(),  //日历里的日期
+      beginTime: new Date(), //用户输入的开始时间
+      endTime: new Date(), //用户输入的结束时间
       firstLabelChoose: "", //用户选择的一级标签
       secondLabelChoose: "", //用户选择的二级标签
       timeNote: "", // 用户输入的时间备注
       fisrtLabels: [], //标签表里的所有一级标签，用于填充下拉框
       secondLabels: [], //标签表里所有的二级标签，用于填充下拉框
-      form: {}
+      allLabels:[],
+      form: {} //表单数据，表单组件仅用于排版，但表单要求一定要绑定一个值，所以才设置的，实际无用处
     };
   },
   watch: {
     caldayChoose(){
         this.loadDayTime()
+        this.beginTime.setDate(this.caldayChoose.getDate())
+        this.endTime.setDate(this.caldayChoose.getDate())
     }
   },    
   methods: {
@@ -101,7 +104,7 @@ export default {
         })
       })
     },
-    loadLabels(){
+    loadFirstLabels(){
       this.fisrtLabels = this.fisrtLabels.splice(0, 0)
       DbUtils.getFirstLabel().then((rows)=>{    
         rows.forEach( row => {
@@ -111,6 +114,14 @@ export default {
           })
         })
       })
+    },
+    loadAllLabels(){
+      DbUtils.getAllLabel().then((rows)=>{
+        rows.forEach( row => {
+          this.allLabels.push(row)
+        })
+      })
+      console.log(this.allLabels);
     },
     loadSecondLabel(){
       this.secondLabelChoose = ''
@@ -144,7 +155,7 @@ export default {
       }
       DbUtils.insertTime(obj).then( ()=>{
           console.log('插入成功');
-         this.loadDayTime(this.caldayChoose)
+         this.loadDayTime()
       }).catch((err) => {
         console.log(err);
         throw err
@@ -152,6 +163,14 @@ export default {
     },  
     timeNoteChange(){
       console.log(this.timeNote);
+      console.log(this.secondLabels);
+      this.allLabels.forEach( label =>{
+        if(-1 !== label.timeNote.indexOf(this.timeNote)){
+          this.firstLabelChoose = label.firstLabel
+          this.secondLabelChoose = label.secondLabel
+        }
+      })
+      
     },
     copyOneDayDataToExcel(){
 
@@ -163,7 +182,10 @@ export default {
   mounted() {
     this.caldayChoose = new Date()
     this.loadDayTime()
-    this.loadLabels()    
+    this.loadAllLabels()
+    this.loadFirstLabels()    
+    
+
   }
 };
 </script>

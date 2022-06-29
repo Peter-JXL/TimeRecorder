@@ -16,10 +16,14 @@ function getSecondLabel(firstLabel){
     return knex.from('labelTable').select("secondLabel").where('firstLabel','=', firstLabel)
 }
 
+//返回标签表的所有数据
+function getAllLabel(){
+    return knex.from('labelTable').select("*")
+}
 
 //返回某一天的所有数据，输入参数为日期
 function getOneDayData(recordDate) {
-    recordDate = moment(recordDate).format('YYYY-MM-DD ').toString()
+    recordDate = moment(recordDate).format('YYYY-MM-DD').toString()
     return knex.from('dataTable').
         select("ID", "recordDate", 'beginTime', 'endTime', 'firstLabel', 'secondLabel', 'timeNote').
         where('recordDate', 'like', `%${recordDate}%`).orderBy('beginTime')
@@ -140,6 +144,7 @@ function statOneDayTime(recordDate) {
 export default {
     getFirstLabel,
     getSecondLabel,
+    getAllLabel,
     getOneDayData,
     insertTime,
     insertLabel,
