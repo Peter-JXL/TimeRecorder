@@ -71,11 +71,7 @@ function updateOneTime({ ID, recordDate, beginTime, endTime, firstLabel, secondL
 
 // 删除一条时间记录
 function deleteOneTime(ID) {
-    knex('dataTable').where('ID', ID).del().then(() => {
-        console.log('delete成功');
-    }).catch((err) => {
-        console.log(err);
-    })
+    return knex('dataTable').where('ID', ID).del()
 }
 
 

@@ -7,6 +7,11 @@
         <el-table-column prop="firstLabel" label="一级标签" width="100" />
         <el-table-column prop="secondLabel" label="二级标签" width="100" />
         <el-table-column prop="timeNote" label="备注" width="120" />
+        <el-table-column label="操作">
+          <template #default="scope">
+              <el-button size="small" @click="deleteOneTime(scope.row.ID)">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </el-col>
 
@@ -94,7 +99,7 @@ export default {
       DbUtils.getOneDayData(this.caldayChoose).then((rows)=>{
         rows.forEach(row=>{
           this.tableData.push({
-            ID: row['id'],
+            ID: row['ID'],
             beginTime: moment(row['beginTime']).format('HH:mm'),
             endTime:  moment(row['endTime']).format('HH:mm'),
             firstLabel: row['firstLabel'],
@@ -102,6 +107,11 @@ export default {
             timeNote: row['timeNote']
           })
         })
+      })
+    },
+    deleteOneTime(ID){
+      DbUtils.deleteOneTime(ID).then(()=>{
+        this.loadDayTime()
       })
     },
     loadFirstLabels(){
@@ -121,7 +131,6 @@ export default {
           this.allLabels.push(row)
         })
       })
-      console.log(this.allLabels);
     },
     loadSecondLabel(){
       this.secondLabelChoose = ''
@@ -162,8 +171,6 @@ export default {
       })
     },  
     timeNoteChange(){
-      console.log(this.timeNote);
-      console.log(this.secondLabels);
       this.allLabels.forEach( label =>{
         if(-1 !== label.timeNote.indexOf(this.timeNote)){
           this.firstLabelChoose = label.firstLabel
@@ -171,7 +178,7 @@ export default {
         }
       })
       
-    },
+    },    
     copyOneDayDataToExcel(){
 
     },
