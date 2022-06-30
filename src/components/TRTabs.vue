@@ -6,7 +6,7 @@
 
 
     <el-tab-pane label="时间分析" name="second">
-      
+      <TRDayAnalyzeVue></TRDayAnalyzeVue>
     </el-tab-pane>
 
 
@@ -31,10 +31,10 @@
 
 <script>
 import TRRecord from './TRRecord.vue'
-
+import TRDayAnalyzeVue from './TRDayAnalyze.vue'
 export default {
     name: "TRTabs",
-    components: { TRRecord }
+    components: { TRRecord,TRDayAnalyzeVue }
 }
 </script>
 
