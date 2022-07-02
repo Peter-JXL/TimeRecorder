@@ -45,15 +45,18 @@ function CreateDbFileAndTable() {
     })
 }
 
-fs.exists(dbFileName, function (exists) {
-    if (exists) {
-        console.log('存在数据库文件');
-    } else {
-        CreateDbFileAndTable()
-    }
-})
+function InitDb(){
+
+    fs.exists(dbFileName, function (exists) {
+        if (exists) {
+            console.log('存在数据库文件');
+        } else {
+            CreateDbFileAndTable()
+        }
+    })
+}
 
 
-
-
-
+export default{
+    InitDb
+}

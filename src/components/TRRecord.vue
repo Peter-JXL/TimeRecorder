@@ -184,6 +184,10 @@ export default {
     },
     updateOneTime(){
 
+    },
+    //提供当前日历日期给 TRDayAnalyze组件
+    sendCaldayChoose(){
+
     }
   },
   mounted() {
