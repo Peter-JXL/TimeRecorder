@@ -1,6 +1,6 @@
 <template>
   <div id="TRDayAnalyzeBox">
-    <div id="chinaChart" style="  height: 600px; width: 500px;"></div>
+    <div id="chinaChart" style="  height: 600px;width: 500px;"></div>
     <div id="ana">
       <el-button @click="refreshEcharts" type="primary">刷新</el-button>
     </div>
@@ -9,6 +9,8 @@
 
 <script>
 import emitter from "@/utils/bus";
+import DbUtils from "@/data/DbUtils";
+import moment from "moment";
 
 export default {
   name: "TRDayAnalyze",
@@ -33,34 +35,24 @@ export default {
           },
         ],
       },
-    }
+    };
   },
   methods: {
     refreshEcharts() {
-      
-    },    
-  },
-  onMounted(){
-
+      const myChart = this.$echarts.init(document.getElementById("chinaChart"));     
+      myChart.setOption(this.charOption);
+    },
   },
   mounted() {
-    this.refreshEcharts();
-    const myChart = this.$echarts.init(document.getElementById("chinaChart"));
-    // 绘制图表
-    myChart.setOption(this.charOption);
+    this.$nextTick(this.refreshEcharts());
     emitter.on("sendCaldayChoose", (data) => {
-      this.caldayChoose = data
+      this.caldayChoose = data;
       console.log(this.caldayChoose);
     });
   },
-  created() {
-    
+  onBeforeUnmount() {
+    emitter.all.delete("sendCaldayChoose");
   },
-  onBeforeUnmount(){
-    emitter.all.delete("sendCaldayChoose")
-  }
- 
-  
 };
 </script>
 
