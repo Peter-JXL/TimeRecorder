@@ -68,6 +68,7 @@
 <script>
 import DbUtils from '@/data/DbUtils';
 import moment from 'moment';
+import emitter from "@/utils/bus";
 
 export default {
   name: "TRRecord",
@@ -91,6 +92,7 @@ export default {
         this.loadDayTime()
         this.beginTime.setDate(this.caldayChoose.getDate())
         this.endTime.setDate(this.caldayChoose.getDate())
+        emitter.emit('sendCaldayChoose', this.caldayChoose)
     }
   },    
   methods: {
@@ -195,8 +197,10 @@ export default {
     this.loadDayTime()
     this.loadAllLabels()
     this.loadFirstLabels()    
-    
-
+    emitter.emit('sendCaldayChoose', this.caldayChoose)
+  },
+  onBeforeUnmount(){
+    emitter.all.delete("sendCaldayChoose")
   }
 };
 </script>

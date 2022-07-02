@@ -8,11 +8,13 @@
 </template>
 
 <script>
+import emitter from "@/utils/bus";
 
 export default {
   name: "TRDayAnalyze",
   data() {
     return {
+      caldayChoose: new Date(),
       charOption: {
         title: {
           text: "ECharts 入门示例",
@@ -46,7 +48,17 @@ export default {
     const myChart = this.$echarts.init(document.getElementById("chinaChart"));
     // 绘制图表
     myChart.setOption(this.charOption);
+    emitter.on("sendCaldayChoose", (data) => {
+      this.caldayChoose = data
+      console.log(this.caldayChoose);
+    });
   },
+  created() {
+    
+  },
+  onBeforeUnmount(){
+    emitter.all.delete("sendCaldayChoose")
+  }
  
   
 };
