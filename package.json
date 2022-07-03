@@ -27,6 +27,7 @@
     "mousetrap": "^1.6.5",
     "sql.js": "^1.7.0",
     "sqlite3": "^5.0.8",
+    "turndown": "^7.1.1",
     "vue": "^3.2.13",
     "vue-echarts": "^6.1.0"
   },

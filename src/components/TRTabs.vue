@@ -5,7 +5,7 @@
     </el-tab-pane>
 
 
-    <el-tab-pane label="时间分析" name="second">
+    <el-tab-pane label="当日时间分析" name="second">
       <TRDayAnalyzeVue></TRDayAnalyzeVue>
     </el-tab-pane>
 

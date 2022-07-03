@@ -1,9 +1,6 @@
 <template>
   <div id="TRDayAnalyzeBox">
     <div id="chinaChart"></div>
-    <div id="ana">
-      <el-button @click="refreshEcharts" type="primary">刷新</el-button>
-    </div>
   </div>
 </template>
 
@@ -84,7 +81,7 @@ export default {
           let errLabel =recordDateMinutes < oneDayMinutes ? "未记录的时间" : "多记录的时间"; //检查用户是少记录了时间还是多记录了时间
           labelTimeMap.set(errLabel, Math.abs(recordDateMinutes - oneDayMinutes));
         }
-        
+
         labelTimeMap.forEach((value,key ) => {
           this.charOption.series[0].data.unshift({
             value: value,
@@ -117,11 +114,6 @@ export default {
   align-items: center;
 }
 
-#ana {
-  border: 1px solid green;
-  width: 700px;
-  height: 500px;
-}
 
 #chinaChart {
   width: 712px;

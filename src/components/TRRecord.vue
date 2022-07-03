@@ -22,15 +22,14 @@
 
 
     <div id="TRRecordRight">
+      <el-form-item>
         <el-calendar id='customizedCalendar'  v-model="caldayChoose" />
-      <br/>
-      <div id="button">
-        <el-button @click="skip('preYear')" type="primary" round size="small">去年</el-button>
-        <el-button @click="skip('preMonth')" type="warning" round size="small">上月</el-button>
-        <el-button @click="skip('preDay')" type="success" round size="small">昨日</el-button>
+      </el-form-item>
+      <el-form-item id="button">
+        <el-button @click="skip('preDay')" type="success" round size="small">前一天</el-button>
         <el-button @click="skip('today')" type="info" round size="small">今天</el-button>
-      </div>
-      <br/>
+        <el-button @click="skip('postDay')" type="warning" round size="small">后一天</el-button>
+      </el-form-item>
 
       <el-form :model="form" label-width="150px">
        <el-form-item label="开始时间：">
@@ -69,16 +68,9 @@
       </el-form>
 
     </div>
-  </div>
-  <el-row :gutter="20">
-    <el-col :span="14">
-      
-    </el-col>
 
-    <el-col :span="10">  
-      
-    </el-col>
-  </el-row>
+
+  </div>
 </template>
 
 <script>
@@ -164,12 +156,9 @@ export default {
     },
     skip(flag) {
       if (flag === 'preYear') this.caldayChoose = new Date(this.caldayChoose.setFullYear(this.caldayChoose.getFullYear() - 1));
-      else if (flag === 'preMonth') this.caldayChoose = new Date(this.caldayChoose.setMonth(this.caldayChoose.getMonth() - 1));
       else if (flag === 'preDay') this.caldayChoose = new Date(this.caldayChoose.setDate(this.caldayChoose.getDate() - 1));
       else if (flag === 'today') this.caldayChoose = new Date();
       else if (flag === 'postDay') this.caldayChoose = new Date(this.caldayChoose.setDate(this.caldayChoose.getDate() + 1));
-      else if (flag === 'postMonth') this.caldayChoose = new Date(this.caldayChoose.setMonth(this.caldayChoose.getMonth() + 1));
-      else if (flag === 'postYear') this.caldayChoose = new Date(this.caldayChoose.setFullYear(this.caldayChoose.getFullYear() + 1));
     },
     addOneTime(){
       let obj = {
@@ -237,8 +226,19 @@ export default {
 }
 
 #TRRecordRight{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   width: 400px;
   height: 580px;
+
+  #button{
+    display: flex;
+    justify-content: center;
+
+  }
 }
 
 #customizedCalendar {
