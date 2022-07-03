@@ -13,8 +13,12 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
+    title:'TimeRecorder, 记录你的时间',
     width: 1200,
     height: 800,
+    center: true,
+    resizable: false,
+    icon: 'D:\\Projects\\timerecorder\\public\\TimeRecorder.ico',
     webPreferences: {
       
       // Use pluginOptions.nodeIntegration, leave this alone
