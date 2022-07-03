@@ -1,7 +1,7 @@
 <template>
   <div  class="common-layout"> 
     <el-container>
-      
+
       <el-main>
         <TRTabs></TRTabs>
       </el-main>
@@ -14,12 +14,11 @@
 </template>
 
 <script>
-import TRMenu from './components/TRMenu.vue';
 import TRTabs from './components/TRTabs.vue';
 
 export default {
   name: "App",
-  components: { TRMenu,TRTabs },
+  components: { TRTabs },
 };
 </script>
 

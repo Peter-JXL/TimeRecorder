@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import mousetrap from 'mousetrap'
 import TRRecord from './TRRecord.vue'
 import TRDayAnalyzeVue from './TRDayAnalyze.vue'
 export default {
@@ -37,9 +38,21 @@ export default {
     components: { TRRecord,TRDayAnalyzeVue },
     data() {
       return {
+        activeNameArr: ['first',"second","third","fourth","fifth"],
+        activeIndex: 0,
         activeName: 'first'
       }
     },
+    watch:{
+      activeIndex(){
+        this.activeName = this.activeNameArr[this.activeIndex]
+      }
+    },
+    mounted(){
+      mousetrap.bind('ctrl+tab', ()=>{
+        this.activeIndex = this.activeIndex == 4 ? 1 : this.activeIndex+1
+      })
+    }
 }
 </script>
 
