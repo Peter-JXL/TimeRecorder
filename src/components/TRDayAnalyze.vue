@@ -25,16 +25,25 @@ export default {
         tooltip: {
           show: true,
           trigger: "item",
+          formatter: '{b} {c}分钟  占比{d}%'
         },
         legend: {
           top: "5%",
           left: "center",
         },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
         series: [
           {
-            name: "Access From",
+            name: "当日数据统计",
             type: "pie",
             radius: "50%",
+            label:{
+              formatter: '{b}: {c}分钟 '
+            },
             data: [],
             emphasis: {
               itemStyle: {
@@ -115,7 +124,7 @@ export default {
 }
 
 #chinaChart {
-  width: 1024px;
+  width: 712px;
   height: 512px;
 }
 </style>
