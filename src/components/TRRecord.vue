@@ -1,7 +1,9 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :span="14">
-      <el-table :data="tableData" stripe border height="528" max-height="2000" 
+  <div id="TRRecord">
+
+
+    <div id="TRRecordLeft">
+      <el-table :data="tableData" stripe border height="560" max-height="2000" 
       :header-cell-style="{'text-align': 'center'}"
       :cell-style="{'text-align':'center'}">
       >
@@ -16,10 +18,11 @@
           </template>
         </el-table-column>
       </el-table>
-    </el-col>
+    </div>
 
-    <el-col :span="10">  
-      <el-calendar id='customizedCalendar'  v-model="caldayChoose" />
+
+    <div id="TRRecordRight">
+        <el-calendar id='customizedCalendar'  v-model="caldayChoose" />
       <br/>
       <div id="button">
         <el-button @click="skip('preYear')" type="primary" round size="small">去年</el-button>
@@ -56,14 +59,24 @@
        </el-form-item>
 
         <el-form-item label="备注：" >
-          <el-input ref="timeNote" v-model="timeNote" type="text" clearable  style="width:270px" @input="timeNoteChange"></el-input>
+          <el-input ref="timeNote" v-model="timeNote" type="text" clearable  style="width:240px" @input="timeNoteChange"></el-input>
         </el-form-item>
 
         <el-form-item >
             <el-button type="primary" @click="addOneTime">添加</el-button>
-            <el-button type="primary" @click="copyOneDayDataToExcel">复制当日记录到Excel表格</el-button>    
+            <el-button type="primary" @click="copyOneDayDataToExcel">复制当日记录到Excel</el-button>    
         </el-form-item>
       </el-form>
+
+    </div>
+  </div>
+  <el-row :gutter="20">
+    <el-col :span="14">
+      
+    </el-col>
+
+    <el-col :span="10">  
+      
     </el-col>
   </el-row>
 </template>
@@ -209,6 +222,27 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
+#TRRecord{
+  display: flex;
+  justify-content: flex-start;
+  align-items: space-between;
+  width: 1200px;
+  height: 580px;
+}
+
+#TRRecordLeft{
+  border: 1px solid green;
+  width: 650px;
+  height: 500px;
+}
+
+#TRRecordRight{
+  border: 1px solid red;
+  width: 400px;
+  height: 580px;
+}
+
 #customizedCalendar {
   :deep(.el-calendar__header)  {
     // 修改头部背景颜色

@@ -84,14 +84,14 @@ export default {
           let errLabel =recordDateMinutes < oneDayMinutes ? "未记录的时间" : "多记录的时间"; //检查用户是少记录了时间还是多记录了时间
           labelTimeMap.set(errLabel, Math.abs(recordDateMinutes - oneDayMinutes));
         }
-
+        
         labelTimeMap.forEach((value,key ) => {
           this.charOption.series[0].data.unshift({
             value: value,
             name: key,
           });
         });
-
+        
         myChart.setOption(this.charOption);
       });
     },

@@ -1,15 +1,6 @@
 <template>
-  <div  class="common-layout"> 
-    <el-container>
-
-      <el-main>
-        <TRTabs></TRTabs>
-      </el-main>
-
-      <el-footer>
-
-      </el-footer>
-    </el-container>
+  <div> 
+    <TRTabs></TRTabs>
   </div>
 </template>
 
