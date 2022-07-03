@@ -232,13 +232,11 @@ export default {
 }
 
 #TRRecordLeft{
-  border: 1px solid green;
   width: 650px;
   height: 500px;
 }
 
 #TRRecordRight{
-  border: 1px solid red;
   width: 400px;
   height: 580px;
 }

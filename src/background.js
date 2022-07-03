@@ -2,6 +2,7 @@
 
 import { app, protocol, BrowserWindow, Menu } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+const path = require('path')
 // import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer' 取消导入
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -10,15 +11,18 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
+console.log(__dirname);
+
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
     title:'TimeRecorder, 记录你的时间',
     width: 1150,
-    height: 700,
+    height: 680,
     center: true,
     resizable: false,
-    icon: 'D:\\Projects\\timerecorder\\public\\TimeRecorder.ico',
+    // icon: 'D:\\Projects\\timerecorder\\public\\TimeRecorder.ico',
+    icon: path.join(__dirname, '../public/TimeRecorder.ico'),
     webPreferences: {
       
       // Use pluginOptions.nodeIntegration, leave this alone
