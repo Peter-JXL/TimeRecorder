@@ -1,6 +1,6 @@
 <template>
   <div id="TRDayAnalyzeBox">
-    <div id="chinaChart" style="  height: 600px;width: 500px;"></div>
+    <div id="chinaChart"></div>
     <div id="ana">
       <el-button @click="refreshEcharts" type="primary">刷新</el-button>
     </div>
@@ -11,6 +11,7 @@
 import emitter from "@/utils/bus";
 import DbUtils from "@/data/DbUtils";
 import moment from "moment";
+var myChart;
 
 export default {
   name: "TRDayAnalyze",
@@ -19,19 +20,29 @@ export default {
       caldayChoose: new Date(),
       charOption: {
         title: {
-          text: "ECharts 入门示例",
+          text: "当日数据统计",
         },
-        tooltip: {},
-        xAxis: {
-          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        tooltip: {
+          show: true,
+          trigger: "item",
         },
-        yAxis: {},
+        legend: {
+          top: "5%",
+          left: "center",
+        },
         series: [
           {
-            name: "Email",
-            type: "line",
-            stack: "Total",
-            data: [120, 132, 101, 134, 90, 230, 210],
+            name: "Access From",
+            type: "pie",
+            radius: "50%",
+            data: [],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
           },
         ],
       },
@@ -39,15 +50,49 @@ export default {
   },
   methods: {
     refreshEcharts() {
-      const myChart = this.$echarts.init(document.getElementById("chinaChart"));     
-      myChart.setOption(this.charOption);
+      const oneDayMinutes = 24 * 60; //一天有多少分钟
+      let recordDateMinutes = 0;
+      var labelTimeMap;
+      this.charOption.series[0].data = this.charOption.series[0].data.slice(0,0)  //清空原本的数据
+
+      DbUtils.statOneDayTime(this.caldayChoose).then((rows) => {
+        labelTimeMap = new Map();
+        rows.forEach((row) => {
+          var firstLabel = row["firstLabel"];
+          var beginTime = moment(row["beginTime"], "YYYY-MM-DD HH:mm");
+          var endTime = moment(row["endTime"], "YYYY-MM-DD HH:mm");
+          var timeSpan = endTime.diff(beginTime, "minute");
+
+          if (labelTimeMap.has(firstLabel)) {
+            labelTimeMap.set(firstLabel,labelTimeMap.get(firstLabel) + timeSpan);
+          } else {
+            labelTimeMap.set(firstLabel, timeSpan, labelTimeMap);
+          }
+          recordDateMinutes += timeSpan;
+        });
+
+        if (recordDateMinutes !== oneDayMinutes) {
+          let errLabel =recordDateMinutes < oneDayMinutes ? "未记录的时间" : "多记录的时间"; //检查用户是少记录了时间还是多记录了时间
+          labelTimeMap.set(errLabel, Math.abs(recordDateMinutes - oneDayMinutes));
+        }
+
+        labelTimeMap.forEach((value,key ) => {
+          this.charOption.series[0].data.unshift({
+            value: value,
+            name: key,
+          });
+        });
+
+        myChart.setOption(this.charOption);
+      });
     },
   },
   mounted() {
+    myChart = this.$echarts.init(document.getElementById("chinaChart"));
     this.$nextTick(this.refreshEcharts());
     emitter.on("sendCaldayChoose", (data) => {
       this.caldayChoose = data;
-      console.log(this.caldayChoose);
+      this.refreshEcharts();
     });
   },
   onBeforeUnmount() {
@@ -65,7 +110,12 @@ export default {
 
 #ana {
   border: 1px solid green;
-  width: 500px;
+  width: 700px;
   height: 500px;
+}
+
+#chinaChart {
+  width: 1024px;
+  height: 512px;
 }
 </style>

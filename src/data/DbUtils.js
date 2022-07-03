@@ -5,19 +5,19 @@ const knex = require('knex')({
     },
     useNullAsDefault: true
 });
-const moment = require( "moment")
+const moment = require("moment")
 
-function getFirstLabel(){
-     return knex.from('labelTable').select("firstLabel").groupBy('firstLabel')
+function getFirstLabel() {
+    return knex.from('labelTable').select("firstLabel").groupBy('firstLabel')
 }
 
 
-function getSecondLabel(firstLabel){
-    return knex.from('labelTable').select("secondLabel").where('firstLabel','=', firstLabel)
+function getSecondLabel(firstLabel) {
+    return knex.from('labelTable').select("secondLabel").where('firstLabel', '=', firstLabel)
 }
 
 //返回标签表的所有数据
-function getAllLabel(){
+function getAllLabel() {
     return knex.from('labelTable').select("*")
 }
 
@@ -76,64 +76,22 @@ function deleteOneTime(ID) {
 
 
 //更新一条标签
-function updateLabel({ID, firstLabel, secondLabel, timeNote}) {
+function updateLabel({ ID, firstLabel, secondLabel, timeNote }) {
     knex('labelTable')
-    .where('ID', '=', ID)
-    .update({
-        firstLabel,
-        secondLabel,
-        timeNote
-    }).then(() => {
-        console.log('update label Table Success');
-    })
-    .catch((err) => {
-        console.log(err);
-        throw err
-    })
+        .where('ID', '=', ID)
+        .update({
+            firstLabel,
+            secondLabel,
+            timeNote
+        })
 }
 
 //统计一天当中每个标签所花的时间，其中未记录的作为单独一个标签
 function statOneDayTime(recordDate) {
-
-    var oneDayMinutes = 24 * 60 //一天有多少分钟
-    var recordDateMinutes = 0
-    var labelTimeMap = new Map()
-    knex.from('dataTable').
+    recordDate = moment(recordDate).format('YYYY-MM-DD').toString()
+    return knex.from('dataTable').
         select("ID", "recordDate", 'beginTime', 'endTime', 'firstLabel', 'secondLabel', 'timeNote').
-        where('recordDate', 'like', `%${recordDate}%`)
-        .then((rows) => {
-            console.log('length' + rows.length);
-            rows.forEach(row => {
-                var firstLabel = row['firstLabel']
-                var beginTime = moment(row['beginTime'], 'YYYY-MM-DD HH:mm')
-                var endTime = moment(row['endTime'], 'YYYY-MM-DD HH:mm')
-                var timeSpan = endTime.diff(beginTime, 'minute', true)
-                // console.log(beginTime.format('YYYY-MM-DD HH:mm'), endTime.format('YYYY-MM-DD HH:mm'), timeSpan);
-                if (labelTimeMap.has(firstLabel)) {
-                    labelTimeMap.set(firstLabel, labelTimeMap.get(firstLabel) + timeSpan)
-                } else {
-                    labelTimeMap.set(firstLabel, timeSpan)
-                }
-                recordDateMinutes += timeSpan
-
-                // console.log(`${row['ID']} ${row['recordDate']}  ${row['beginTime']} ${row['endTime']}  ${row['firstLabel']} ${row['secondLabel']}  ${row['timeNote']}`);
-            });
-            console.log('记录的时间：', recordDateMinutes);
-            console.log('未记录的时间：', oneDayMinutes - recordDateMinutes);
-            if (recordDateMinutes !== oneDayMinutes) {
-                let errLabel = recordDateMinutes < oneDayMinutes ? '未记录的时间' : '多记录的时间'  //检查用户是少记录了时间还是多记录了时间
-                labelTimeMap.set(errLabel, Math.abs(recordDateMinutes - oneDayMinutes))
-            }
-            console.log(labelTimeMap);
-
-        })
-        .catch((err) => { console.log(err); throw err })
-        .finally(() => {
-            knex.destroy();
-        });
-
-    return labelTimeMap
-
+        where('recordDate', 'like', `%${recordDate}%`);
 }
 
 

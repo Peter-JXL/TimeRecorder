@@ -223,7 +223,7 @@ const updateTime = {
 
 
 // updateOneTime(updateTime)
-// statOneDayTime('2022-06-20')
+statOneDayTime('2022-6-28')
 
 // updateLabel({
 //     ID: '1',
@@ -260,11 +260,11 @@ const updateTime = {
 
 
 
-insertTime({
-    recordDate: '2022-6-28', 
-    beginTime: '2022-6-28 00:00', 
-    endTime: '2022-6-28 7:50', 
-    firstLabel: '睡眠', 
-    secondLabel: '睡眠',
-    timeNote: '睡眠'
-})
+// insertTime({
+//     recordDate: '2022-6-28', 
+//     beginTime: '2022-6-28 00:00', 
+//     endTime: '2022-6-28 7:50', 
+//     firstLabel: '睡眠', 
+//     secondLabel: '睡眠',
+//     timeNote: '睡眠'
+// })
