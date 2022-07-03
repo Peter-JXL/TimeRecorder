@@ -1,11 +1,7 @@
 <template>
   <div  class="common-layout"> 
     <el-container>
-      <el-header>
-        <TRMenu></TRMenu>
-      </el-header>
-
-
+      
       <el-main>
         <TRTabs></TRTabs>
       </el-main>

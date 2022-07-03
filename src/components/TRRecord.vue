@@ -9,7 +9,7 @@
         <el-table-column prop="endTime" label="结束时间" width="85" />
         <el-table-column prop="firstLabel" label="一级标签" width="100" />
         <el-table-column prop="secondLabel" label="二级标签" width="100" />
-        <el-table-column prop="timeNote" label="备注" align="left" width="200" />
+        <el-table-column prop="timeNote" label="备注" width="150" />
         <el-table-column label="操作" width="100" >
           <template #default="scope">
               <el-button size="small" @click="deleteOneTime(scope.row.ID)">删除</el-button>
