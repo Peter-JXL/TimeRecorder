@@ -11,8 +11,6 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
-console.log(__dirname);
-
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -21,7 +19,6 @@ async function createWindow() {
     height: 680,
     center: true,
     resizable: false,
-    // icon: 'D:\\Projects\\timerecorder\\public\\TimeRecorder.ico',
     icon: path.join(__dirname, '../public/TimeRecorder.ico'),
     webPreferences: {
       
