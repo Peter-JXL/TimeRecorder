@@ -1,5 +1,5 @@
 <template>
-  <el-tabs class="demo-tabs">
+  <el-tabs class="demo-tabs" v-model="activeName">
     <el-tab-pane label="记录时间" name="first">
       <TRRecord></TRRecord>
     </el-tab-pane>
@@ -34,7 +34,12 @@ import TRRecord from './TRRecord.vue'
 import TRDayAnalyzeVue from './TRDayAnalyze.vue'
 export default {
     name: "TRTabs",
-    components: { TRRecord,TRDayAnalyzeVue }
+    components: { TRRecord,TRDayAnalyzeVue },
+    data() {
+      return {
+        activeName: 'first'
+      }
+    },
 }
 </script>
 
