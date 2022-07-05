@@ -16,7 +16,7 @@ async function createWindow() {
   const win = new BrowserWindow({
     title:'TimeRecorder, 记录你的时间',
     width: 1150,
-    height: 680,
+    height: 700,
     center: true,
     resizable: false,
     icon: path.join(__dirname, '../public/TimeRecorder.ico'),
