@@ -3,7 +3,9 @@
 
 
     <div id="TRRecordLeft">
-      <el-table :data="tableData" stripe border height="560" max-height="2000" 
+      <el-table 
+      id="recordTable"
+      :data="tableData" stripe border height="560" max-height="2000" 
       :header-cell-style="{'text-align': 'center'}"
       :cell-style="{'text-align':'center'}">
       >
@@ -63,7 +65,7 @@
 
         <el-form-item >
             <el-button type="primary" @click="addOneTime">添加</el-button>
-            <el-button type="primary" @click="copyOneDayDataToExcel">复制当日记录到Excel</el-button>    
+            <el-button type="primary" @click="copyOneDayDataToMarkdown">复制当日记录</el-button>    
         </el-form-item>
       </el-form>
 
@@ -74,9 +76,11 @@
 </template>
 
 <script>
-import DbUtils from '@/data/DbUtils';
 import moment from 'moment';
+import DbUtils from '@/data/DbUtils';
 import emitter from "@/utils/bus";
+const {clipboard} = require( 'electron')
+import showdown from 'showdown'
 
 export default {
   name: "TRRecord",
@@ -186,8 +190,39 @@ export default {
       })
       
     },
-    copyOneDayDataToExcel(){
+    createTable(tableData){
+      var table = document.createElement('table')
+      var thead = table.createTHead()
+      var tbody = table.createTBody()
 
+      thead.insertRow(0)
+      var arr = ["开始时间","结束时间","一级标签","二级标签","备注"]
+      for(let i = 0; i < arr.length; i++){
+        var th = document.createElement('th')
+        thead.rows[0].appendChild(th)
+        thead.rows[0].cells[i].appendChild(document.createTextNode(arr[i]))
+      }
+
+      for(let i = 0; i<tableData.length; i++){
+        tbody.insertRow(i)
+        tbody.rows[i].insertCell(0)
+        tbody.rows[i].cells[0].appendChild(document.createTextNode(this.tableData[i].beginTime))
+        tbody.rows[i].insertCell(1)
+        tbody.rows[i].cells[1].appendChild(document.createTextNode(this.tableData[i].endTime))
+        tbody.rows[i].insertCell(2)
+        tbody.rows[i].cells[2].appendChild(document.createTextNode(this.tableData[i].firstLabel))
+        tbody.rows[i].insertCell(3)
+        tbody.rows[i].cells[3].appendChild(document.createTextNode(this.tableData[i].secondLabel))
+        tbody.rows[i].insertCell(4)
+        tbody.rows[i].cells[4].appendChild(document.createTextNode(this.tableData[i].timeNote))
+      }      
+      return table    
+    },
+    copyOneDayDataToMarkdown(){
+      var tableElement = this.createTable(this.tableData).outerHTML
+      var conveter = new showdown.Converter({tables: true})
+      var result = conveter.makeMarkdown(tableElement)
+      clipboard.writeText(result)
     },
     updateOneTime(){
 
