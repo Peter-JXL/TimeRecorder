@@ -16,8 +16,7 @@
 
     
     <el-tab-pane label="标签管理" name="fourth">
-      
-
+      <TRLabels></TRLabels>
     </el-tab-pane>
 
     
@@ -33,9 +32,10 @@
 import mousetrap from 'mousetrap'
 import TRRecord from './TRRecord.vue'
 import TRDayAnalyzeVue from './TRDayAnalyze.vue'
+import TRLabels from './TRLabels.vue'
 export default {
     name: "TRTabs",
-    components: { TRRecord,TRDayAnalyzeVue },
+    components: { TRRecord, TRDayAnalyzeVue, TRLabels },
     data() {
       return {
         activeNameArr: ['first',"second","third","fourth","fifth"],
