@@ -175,7 +175,6 @@ export default {
         timeNote: this.timeNote
       }
       DbUtils.insertTime(obj).then( ()=>{
-          console.log('插入成功');
          this.loadDayTime()
       }).catch((err) => {
         console.log(err);
