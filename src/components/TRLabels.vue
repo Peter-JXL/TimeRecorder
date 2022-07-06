@@ -35,7 +35,7 @@
           </el-form-item>
 
           <el-form-item >
-            <el-button type="primary" @click="addOneLabel">添加</el-button>
+            <el-button type="primary" @click="addOneLabel">添加一条标签</el-button>
           </el-form-item>
 
         </el-form>
