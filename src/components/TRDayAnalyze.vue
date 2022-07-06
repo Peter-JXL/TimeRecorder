@@ -60,7 +60,7 @@ export default {
       let recordDateMinutes = 0;
       var labelTimeMap;
       this.charOption.series[0].data = this.charOption.series[0].data.slice(0,0)  //清空原本的数据
-
+      this.charOption.title.text =  moment( this.caldayChoose).format('YYYY-MM-DD').toString() + '日的数据统计'
       DbUtils.statOneDayTime(this.caldayChoose).then((rows) => {
         labelTimeMap = new Map();
         rows.forEach((row) => {
