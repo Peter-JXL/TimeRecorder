@@ -74,6 +74,10 @@ function deleteOneTime(ID) {
     return knex('dataTable').where('ID', ID).del()
 }
 
+// 删除一条时间记录
+function deleteOneLabel(ID) {
+    return knex('labelTable').where('ID', ID).del()
+}
 
 //更新一条标签
 function updateLabel({ ID, firstLabel, secondLabel, timeNote }) {
@@ -103,6 +107,7 @@ export default {
     insertTime,
     insertLabel,
     updateOneTime,
+    deleteOneLabel,
     deleteOneTime,
     updateLabel,
     statOneDayTime
