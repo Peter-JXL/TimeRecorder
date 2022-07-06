@@ -36,14 +36,7 @@ function insertTime(oneTime) {
 
 //插入一条标签
 function insertLabel(label) {
-    knex('labelTable')
-        .insert(label).then(() => {
-            console.log('insert Label Table Success');
-        })
-        .catch((err) => {
-            console.log(err);
-            throw err
-        })
+    return knex('labelTable').insert(label)
 }
 
 
