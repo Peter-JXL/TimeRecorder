@@ -18,7 +18,7 @@ function getSecondLabel(firstLabel) {
 
 //返回标签表的所有数据
 function getAllLabel() {
-    return knex.from('labelTable').select("*")
+    return knex.from('labelTable').select("*").orderBy('firstLabel')
 }
 
 //返回某一天的所有数据，输入参数为日期
