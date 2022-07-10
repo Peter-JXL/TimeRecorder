@@ -74,13 +74,7 @@ function deleteOneLabel(ID) {
 
 //更新一条标签
 function updateLabel({ ID, firstLabel, secondLabel, timeNote }) {
-    knex('labelTable')
-        .where('ID', '=', ID)
-        .update({
-            firstLabel,
-            secondLabel,
-            timeNote
-        })
+    return knex('labelTable').where('ID', '=', ID).update({firstLabel, secondLabel, timeNote })
 }
 
 //统计一天当中每个标签所花的时间，其中未记录的作为单独一个标签

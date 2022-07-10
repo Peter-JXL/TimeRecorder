@@ -7,13 +7,20 @@
             :header-cell-style="{'text-align': 'center'}"
             :cell-style="{'text-align':'center'}"
             :default-sort="{ prop: 'date', order: 'descending' }"
+            @cell-dblclick="editLabelData"
             >
               <el-table-column prop="firstLabel" label="一级标签" width="120" sortable/>
               <el-table-column prop="secondLabel" label="二级标签" width="120" sortable/>
-              <el-table-column prop="timeNote" label="备注" width="500" />
+              <el-table-column prop="timeNote" label="备注" width="500" >
+                <template #default="scope">
+                    <el-input v-if="scope.row['isShow']" v-model="scope.row.timeNote" @blur="updateLabel(scope.row)" />
+                    <span v-else>{{scope.row.timeNote}}</span>
+                </template>
+              </el-table-column>
               <el-table-column label="操作" width="100" >
                 <template #default="scope">
                     <el-button size="small" @click="deleteOneLabel(scope.row.ID)">删除</el-button>
+                    
                 </template>
               </el-table-column>
           </el-table>
@@ -54,7 +61,6 @@ export default {
       secondLabel:'',
       timeNote:'',
       allLabels:[],
-      
     }
   },
   methods: {
@@ -80,6 +86,20 @@ export default {
     deleteOneLabel(ID){
       DbUtils.deleteOneLabel(ID).then(()=>{
         this.loadLabelsData()
+      })
+    },
+    editLabelData(row){
+      row['isShow'] = true
+    },
+    updateLabel(row){
+      let {ID, firstLabel, secondLabel, timeNote } = row
+      DbUtils.updateLabel({
+        ID,
+        firstLabel,
+        secondLabel,
+        timeNote
+      }).then(()=>{
+        row['isShow'] = false
       })
     }
   },
