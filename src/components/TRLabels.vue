@@ -52,6 +52,7 @@
 
 <script>
 import DbUtils from '@/data/DbUtils'
+import { ElMessage  } from 'element-plus'
 
 export default {
   name: 'TRLabels',
@@ -99,6 +100,10 @@ export default {
         secondLabel,
         timeNote
       }).then(()=>{
+        ElMessage({
+          message:'修改标签成功！',
+          type: 'success'
+        })
         row['isShow'] = false
       })
     }
