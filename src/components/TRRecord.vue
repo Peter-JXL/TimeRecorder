@@ -8,6 +8,7 @@
       :data="tableData" stripe border height="560" max-height="2000" 
       :header-cell-style="{'text-align': 'center'}"
       :cell-style="{'text-align':'center'}"
+      show-overflow-tooltip="true"
       :default-sort="{ prop: 'date', order: 'descending' }"
       >
         <el-table-column prop="beginTime" label="开始时间" width="110" sortable />
@@ -34,7 +35,7 @@
         <el-button @click="skip('postDay')" type="warning" round size="small">后一天</el-button>
       </el-form-item>
 
-      <el-form :model="form" label-width="150px">
+      <el-form label-width="150px">
         <el-form-item label="开始时间：">
           <el-date-picker v-model="beginDate" type="date" style="width:120px"/>
           <el-time-picker v-model="beginTime" format=" HH:mm" style="width:120px"/>
@@ -81,13 +82,21 @@
 <script>
 import DbUtils from '@/data/DbUtils'
 import emitter from "@/utils/bus"
-const {clipboard} = require( 'electron')
+import {reactive} from 'vue'
+const {clipboard} = require('electron')
 import showdown from 'showdown'
 import moment from 'moment'
 
 export default {
   name: "TRRecord",
-  
+  setup(){
+    let beginDate = reactive(new Date())
+    let endDate  = reactive(new Date())
+    return {
+      beginDate,
+      endDate
+    }
+  },
   data() {
     return {
       tableData: [],   //一天的时间记录d
@@ -100,13 +109,11 @@ export default {
       fisrtLabels: [],        //标签表里的所有一级标签，用于填充下拉框
       secondLabels: [],       //标签表里所有的二级标签，用于填充下拉框
       allLabels:[],           //标签表里所有的数据，用于在备注变化时更新标签选择框
-      form: {},               //表单数据，表单组件仅用于排版，但表单要求一定要绑定一个值，所以才设置的，实际无用处
     };
   },
   watch: {
     caldayChoose(){
         this.loadDayTime()
-        // console.log(this.caldayChoose.getDate()) //例如7.6就输出6  
         this.beginDate.setDate(this.caldayChoose.getDate())
         this.endDate.setDate(this.caldayChoose.getDate())
         emitter.emit('sendCaldayChoose', this.caldayChoose)  //将日历选中的日期发给当日时间分析组件，用于展示饼图
