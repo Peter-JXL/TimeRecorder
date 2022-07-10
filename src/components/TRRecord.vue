@@ -35,16 +35,18 @@
       </el-form-item>
 
       <el-form :model="form" label-width="150px">
-       <el-form-item label="开始时间：">
-          <el-time-picker v-model="beginTime" format="HH:mm" />
-       </el-form-item>
+        <el-form-item label="开始时间：">
+          <el-date-picker v-model="beginDate" type="date" style="width:120px"/>
+          <el-time-picker v-model="beginTime" format=" HH:mm" style="width:120px"/>
+        </el-form-item>
 
-       <el-form-item label="结束时间：">
-          <el-time-picker v-model="endTime" format="HH:mm" @keydown.enter="$refs.timeNote.focus()" />
-       </el-form-item>
+        <el-form-item label="结束时间：">
+          <el-date-picker v-model="endDate" type="date" style="width:120px"/>
+          <el-time-picker v-model="endTime" format=" HH:mm" @keydown.enter="$refs.timeNote.focus()" style="width:120px"/>
+        </el-form-item>
 
         <el-form-item label="一级标签：">
-          <el-select v-model="firstLabelChoose" class="m-2"  clearable @change="loadSecondLabel">
+          <el-select v-model="firstLabelChoose"  clearable @change="loadSecondLabel">
             <el-option v-for="item in fisrtLabels" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
        </el-form-item>
@@ -77,35 +79,38 @@
 </template>
 
 <script>
-import moment from 'moment';
-import DbUtils from '@/data/DbUtils';
-import emitter from "@/utils/bus";
+import DbUtils from '@/data/DbUtils'
+import emitter from "@/utils/bus"
 const {clipboard} = require( 'electron')
 import showdown from 'showdown'
+import moment from 'moment'
 
 export default {
   name: "TRRecord",
+  
   data() {
     return {
-      tableData: [],   //一天的时间记录
+      tableData: [],   //一天的时间记录d
       caldayChoose: new Date(),  //日历里的日期
-      beginTime: new Date(), //用户输入的开始时间
-      endTime: new Date(), //用户输入的结束时间
-      firstLabelChoose: "", //用户选择的一级标签
-      secondLabelChoose: "", //用户选择的二级标签
-      timeNote: "", // 用户输入的时间备注
-      fisrtLabels: [], //标签表里的所有一级标签，用于填充下拉框
-      secondLabels: [], //标签表里所有的二级标签，用于填充下拉框
-      allLabels:[],
-      form: {} //表单数据，表单组件仅用于排版，但表单要求一定要绑定一个值，所以才设置的，实际无用处
+      beginTime: new Date(),  //用户输入的开始时间
+      endTime: new Date(),    //用户输入的结束时间
+      firstLabelChoose: "",   //用户选择的一级标签
+      secondLabelChoose: "",  //用户选择的二级标签
+      timeNote: "",           // 用户输入的时间备注
+      fisrtLabels: [],        //标签表里的所有一级标签，用于填充下拉框
+      secondLabels: [],       //标签表里所有的二级标签，用于填充下拉框
+      allLabels:[],           //标签表里所有的数据，用于在备注变化时更新标签选择框
+      form: {},               //表单数据，表单组件仅用于排版，但表单要求一定要绑定一个值，所以才设置的，实际无用处
     };
   },
   watch: {
     caldayChoose(){
         this.loadDayTime()
-        this.beginTime.setDate(this.caldayChoose.getDate())
-        this.endTime.setDate(this.caldayChoose.getDate())
-        emitter.emit('sendCaldayChoose', this.caldayChoose)
+        // console.log(this.caldayChoose.getDate()) //例如7.6就输出6  
+        this.beginDate.setDate(this.caldayChoose.getDate())
+        this.endDate.setDate(this.caldayChoose.getDate())
+        emitter.emit('sendCaldayChoose', this.caldayChoose)  //将日历选中的日期发给当日时间分析组件，用于展示饼图
+        console.log(this.beginDate);
     }
   },    
   methods: {
@@ -223,9 +228,6 @@ export default {
       var conveter = new showdown.Converter({tables: true})
       var result = conveter.makeMarkdown(tableElement)
       clipboard.writeText(result)
-    },
-    updateOneTime(){
-
     },
   },
   mounted() {

@@ -20,7 +20,7 @@
       </div>
       
       <div id="TRLabelsMainRight">
-        <el-form :model="form" label-width="100px">
+        <el-form v-model="form" label-width="100px">
           <el-form-item label="一级标签：" >
             <el-input ref="timeNote" v-model="firstLaebl" type="text" clearable  style="width:200px" ></el-input>
           </el-form-item>
@@ -53,7 +53,8 @@ export default {
       firstLaebl:'',
       secondLabel:'',
       timeNote:'',
-      allLabels:[]
+      allLabels:[],
+      form:'' //表单数据，表单组件仅用于排版，但表单要求一定要绑定一个值，所以才设置的，实际无用处
       
     }
   },
