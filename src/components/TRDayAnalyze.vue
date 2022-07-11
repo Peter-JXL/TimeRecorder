@@ -94,8 +94,10 @@ export default {
     },
   },
   mounted() {
-    myChart = this.$echarts.init(document.getElementById("chinaChart"));
-    this.$nextTick(this.refreshEcharts());
+    this.$nextTick( ()=>{
+      myChart = this.$echarts.init(document.getElementById("chinaChart"));
+      this.refreshEcharts()
+    });
     emitter.on("sendCaldayChoose", (data) => {
       this.caldayChoose = data;
       this.refreshEcharts();
