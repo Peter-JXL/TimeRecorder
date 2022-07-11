@@ -1,10 +1,12 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Menu } from 'electron'
+import { app, protocol, BrowserWindow, Menu, globalShortcut  } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 const path = require('path')
 // import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer' 取消导入
 const isDevelopment = process.env.NODE_ENV !== 'production'
+
+let win
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -13,7 +15,7 @@ protocol.registerSchemesAsPrivileged([
 
 async function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+    win = new BrowserWindow({
     title:'TimeRecorder, 记录你的时间',
     width: 1200,
     height: 700,
@@ -68,6 +70,9 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }*/
+  globalShortcut.register('CommandOrControl+Shift+i', function () {
+    win.webContents.openDevTools()
+  })
   createWindow()
 })
 
