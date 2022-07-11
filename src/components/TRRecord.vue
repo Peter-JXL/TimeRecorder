@@ -37,13 +37,13 @@
 
       <el-form label-width="150px">
         <el-form-item label="开始时间：">
-          <el-date-picker v-model="beginDate" type="date" style="width:120px"/>
-          <el-time-picker v-model="beginTime" format=" HH:mm" style="width:120px"/>
+          <el-date-picker v-model="dateObj.beginDate" type="date" style="width:140px" @change="changeBeginDate" />
+          <el-time-picker v-model="dateObj.beginTime" format=" HH:mm" style="width:110px"  @keydown.enter="$refs.endDate.focus()"/>
         </el-form-item>
 
         <el-form-item label="结束时间：">
-          <el-date-picker v-model="endDate" type="date" style="width:120px"/>
-          <el-time-picker v-model="endTime" format=" HH:mm" @keydown.enter="$refs.timeNote.focus()" style="width:120px"/>
+          <el-date-picker v-model="dateObj.endDate" type="date" style="width:140px" @change="changeEndDate"/>
+          <el-time-picker  ref="endDate" v-model="dateObj.endTime" format=" HH:mm" @keydown.enter="$refs.timeNote.focus()" style="width:110px"/>
         </el-form-item>
 
         <el-form-item label="一级标签：">
@@ -55,11 +55,7 @@
        <el-form-item label="二级标签：">
           <el-select v-model="secondLabelChoose"  clearable>
           <el-option
-            v-for="item in secondLabels"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+            v-for="item in secondLabels" :key="item.value" :label="item.label" :value="item.value"/>
           </el-select>
        </el-form-item>
 
@@ -82,27 +78,22 @@
 <script>
 import DbUtils from '@/data/DbUtils'
 import emitter from "@/utils/bus"
-import {reactive} from 'vue'
 const {clipboard} = require('electron')
 import showdown from 'showdown'
 import moment from 'moment'
 
 export default {
-  name: "TRRecord",
-  setup(){
-    let beginDate = reactive(new Date())
-    let endDate  = reactive(new Date())
-    return {
-      beginDate,
-      endDate
-    }
-  },
+  name: "TRRecord",  
   data() {
     return {
       tableData: [],   //一天的时间记录d
       caldayChoose: new Date(),  //日历里的日期
-      beginTime: new Date(),  //用户输入的开始时间
-      endTime: new Date(),    //用户输入的结束时间
+      dateObj: {                 //Date类型不能被响应式，因此放在对象类型里包裹住
+        beginDate: new Date(),  //用户输入的开始时间
+        endDate: new Date(),    //用户输入的结束时间
+        beginTime: new Date(),  //用户输入的开始时间
+        endTime: new Date(),    //用户输入的结束时间
+      },
       firstLabelChoose: "",   //用户选择的一级标签
       secondLabelChoose: "",  //用户选择的二级标签
       timeNote: "",           // 用户输入的时间备注
@@ -114,15 +105,15 @@ export default {
   watch: {
     caldayChoose(){
         this.loadDayTime()
-        this.beginDate.setDate(this.caldayChoose.getDate())
-        this.endDate.setDate(this.caldayChoose.getDate())
+        this.dateObj.beginDate = new Date(this.dateObj.beginDate.setDate(this.caldayChoose.getDate()))
+        this.dateObj.endDate = new Date(this.dateObj.endDate.setDate(this.caldayChoose.getDate()))
         emitter.emit('sendCaldayChoose', this.caldayChoose)  //将日历选中的日期发给当日时间分析组件，用于展示饼图
-        console.log(this.beginDate);
-    }
+    }, 
   },    
   methods: {
+    //加载一天的数据
     loadDayTime(){
-      this.tableData = this.tableData.splice(0, 0)
+      this.tableData = this.tableData.splice(0, 0)   //清空原始数据
       DbUtils.getOneDayData(this.caldayChoose).then((rows)=>{
         rows.forEach(row=>{
           this.tableData.push({
@@ -136,11 +127,13 @@ export default {
         })
       })
     },
+    //删除一条时间记录
     deleteOneTime(ID){
       DbUtils.deleteOneTime(ID).then(()=>{
         this.loadDayTime()
       })
     },
+    //加载一级标签并填充到下拉框
     loadFirstLabels(){
       this.fisrtLabels = this.fisrtLabels.splice(0, 0)
       DbUtils.getFirstLabel().then((rows)=>{    
@@ -152,6 +145,7 @@ export default {
         })
       })
     },
+    //加载全部标签，用于备注变化的时候填充下拉框
     loadAllLabels(){
       DbUtils.getAllLabel().then((rows)=>{
         rows.forEach( row => {
@@ -159,6 +153,7 @@ export default {
         })
       })
     },
+    //用户选中一级标签的时候，自动填充该一级标签下的二级标签
     loadSecondLabel(){
       this.secondLabelChoose = ''
       this.secondLabels = this.secondLabels.splice(0, 0)
@@ -171,28 +166,28 @@ export default {
         })
       })
     },
+    //日历组件当前日期变化
     skip(flag) {
       if (flag === 'preYear') this.caldayChoose = new Date(this.caldayChoose.setFullYear(this.caldayChoose.getFullYear() - 1));
       else if (flag === 'preDay') this.caldayChoose = new Date(this.caldayChoose.setDate(this.caldayChoose.getDate() - 1));
       else if (flag === 'today') this.caldayChoose = new Date();
       else if (flag === 'postDay') this.caldayChoose = new Date(this.caldayChoose.setDate(this.caldayChoose.getDate() + 1));
     },
+    //添加一条时间记录
     addOneTime(){
       let obj = {
         recordDate: moment(this.caldayChoose).format('YYYY-MM-DD'), 
-        beginTime: moment(this.beginTime).format('YYYY-MM-DD HH:mm'), 
-        endTime: moment(this.endTime).format('YYYY-MM-DD HH:mm'), 
+        beginTime: moment(this.dateObj.beginTime).format('YYYY-MM-DD HH:mm'), 
+        endTime: moment(this.dateObj.endTime).format('YYYY-MM-DD HH:mm'), 
         firstLabel: this.firstLabelChoose, 
         secondLabel: this.secondLabelChoose,
         timeNote: this.timeNote
       }
       DbUtils.insertTime(obj).then( ()=>{
          this.loadDayTime()
-      }).catch((err) => {
-        console.log(err);
-        throw err
       })
     },  
+    //当用户输入的备注里包含二级标签的时候，自动填充一级和二级标签
     timeNoteChange(){
       this.allLabels.forEach( label =>{
         if(-1 !== label.timeNote.indexOf(this.timeNote)){
@@ -200,8 +195,8 @@ export default {
           this.secondLabelChoose = label.secondLabel
         }
       })
-      
     },
+    //根据当天日期数据生成一个table dom元素
     createTable(tableData){
       var table = document.createElement('table')
       var thead = table.createTHead()
@@ -230,13 +225,21 @@ export default {
       }      
       return table    
     },
+    //将当天日期数据转换为Markdown表格，并复制到剪贴板，用showdown转换createTable方法生成的table dom元素
     copyOneDayDataToMarkdown(){
       var tableElement = this.createTable(this.tableData).outerHTML
       var conveter = new showdown.Converter({tables: true})
       var result = conveter.makeMarkdown(tableElement)
       clipboard.writeText(result)
     },
+    changeBeginDate(){
+        this.dateObj.beginTime = new Date(this.dateObj.beginDate.setDate(this.dateObj.beginDate.getDate()))
+    },
+    changeEndDate(){
+        this.dateObj.endTime = new Date(this.dateObj.endDate.setDate(this.dateObj.endDate.getDate()))
+    }
   },
+  //启动时自动加载当天数据
   mounted() {
     this.caldayChoose = new Date()
     this.loadDayTime()
@@ -244,6 +247,7 @@ export default {
     this.loadFirstLabels()    
     emitter.emit('sendCaldayChoose', this.caldayChoose)
   },
+  //销毁时取消事件总线
   onBeforeUnmount(){
     emitter.all.delete("sendCaldayChoose")
   }
