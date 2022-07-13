@@ -37,13 +37,13 @@
 
       <el-form label-width="150px">
         <el-form-item label="开始时间：">
-          <el-date-picker v-model="dateObj.beginDate" type="date" style="width:140px" @change="changeBeginDate" />
-          <el-time-picker v-model="dateObj.beginTime" format=" HH:mm" style="width:110px"  @keydown.enter="$refs.endDate.focus()"/>
+          <input type="date" v-model="beginDate"  class="myInput inputDate" >
+          <input type="time" v-model="beginTime"  class="myInput inputTime" @keydown.enter="$refs.endTime.focus()" >
         </el-form-item>
 
         <el-form-item label="结束时间：">
-          <el-date-picker v-model="dateObj.endDate" type="date" style="width:140px" @change="changeEndDate"/>
-          <el-time-picker  ref="endDate" v-model="dateObj.endTime" format=" HH:mm" @keydown.enter="$refs.timeNote.focus()" style="width:110px"/>
+          <input type="date" v-model="endDate" class="myInput inputDate">
+          <input type="time" v-model="endTime" class="myInput inputTime" ref="endTime" @keydown.enter="$refs.timeNote.focus()" >
         </el-form-item>
 
         <el-form-item label="一级标签：">
@@ -88,15 +88,13 @@ export default {
     return {
       tableData: [],   //一天的时间记录d
       caldayChoose: new Date(),  //日历里的日期
-      dateObj: {                 //Date类型不能被响应式，因此放在对象类型里包裹住
-        beginDate: new Date(),  //用户输入的开始时间
-        endDate: new Date(),    //用户输入的结束时间
-        beginTime: new Date(),  //用户输入的开始时间
-        endTime: new Date(),    //用户输入的结束时间
-      },
-      firstLabelChoose: "",   //用户选择的一级标签
-      secondLabelChoose: "",  //用户选择的二级标签
-      timeNote: "",           // 用户输入的时间备注
+      beginDate: '',      
+      beginTime: '',
+      endDate: '',
+      endTime:'',
+      firstLabelChoose: '',   //用户选择的一级标签
+      secondLabelChoose: '',  //用户选择的二级标签
+      timeNote: '',           // 用户输入的时间备注
       fisrtLabels: [],        //标签表里的所有一级标签，用于填充下拉框
       secondLabels: [],       //标签表里所有的二级标签，用于填充下拉框
       allLabels:[],           //标签表里所有的数据，用于在备注变化时更新标签选择框
@@ -105,9 +103,9 @@ export default {
   watch: {
     caldayChoose(){
         this.loadDayTime()
-        this.dateObj.beginDate = new Date(this.dateObj.beginDate.setDate(this.caldayChoose.getDate()))
-        this.dateObj.endDate = new Date(this.dateObj.endDate.setDate(this.caldayChoose.getDate()))
         emitter.emit('sendCaldayChoose', this.caldayChoose)  //将日历选中的日期发给当日时间分析组件，用于展示饼图
+        this.beginDate = moment(this.caldayChoose).format('yyyy-MM-DD')
+        this.endDate = moment(this.caldayChoose).format('yyyy-MM-DD')
     }, 
   },    
   methods: {
@@ -177,14 +175,18 @@ export default {
     addOneTime(){
       let obj = {
         recordDate: moment(this.caldayChoose).format('YYYY-MM-DD'), 
-        beginTime: moment(this.dateObj.beginTime).format('YYYY-MM-DD HH:mm'), 
-        endTime: moment(this.dateObj.endTime).format('YYYY-MM-DD HH:mm'), 
+        beginTime: moment(`${this.beginDate} ${this.beginTime}`).format('YYYY-MM-DD HH:mm'), 
+        endTime: moment(`${this.endDate} ${this.endTime}`).format('YYYY-MM-DD HH:mm'), 
         firstLabel: this.firstLabelChoose, 
         secondLabel: this.secondLabelChoose,
         timeNote: this.timeNote
       }
       DbUtils.insertTime(obj).then( ()=>{
-         this.loadDayTime()
+        this.loadDayTime()
+        this.$nextTick(()=>{
+          this.beginTime = this.endTime
+          this.$refs.endTime.focus()
+        })
       })
     },  
     //当用户输入的备注里包含二级标签的时候，自动填充一级和二级标签
@@ -375,6 +377,36 @@ export default {
   button { 
     padding: 3px 10px;
   }
+}
+
+.myInput{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: inherit;
+  color: #606266;
+  border-color: #dcdfe6;
+  border-radius: 4px;  
+  height: 30px;
+  line-height: 30px;
+}
+
+.myInput:focus {
+  border-color: #409eff;
+}
+.myInput:focus-visible{
+  outline: #409eff;
+
+}
+.myInput:hover{
+  border-color: #c0c4cc;
+
+}
+
+.inputDate{
+
+}
+
+.inputTime{
+
 }
 
 </style>
