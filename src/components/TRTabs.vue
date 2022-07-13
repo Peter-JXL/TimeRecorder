@@ -9,20 +9,14 @@
       <TRDayAnalyzeVue></TRDayAnalyzeVue>
     </el-tab-pane>
 
-
-    <el-tab-pane label="数据查询与更新" name="third">
-      
-    </el-tab-pane>
-
     
-    <el-tab-pane label="标签管理" name="fourth">
+    <el-tab-pane label="标签管理" name="third">
       <TRLabels></TRLabels>
     </el-tab-pane>
 
     
-    <el-tab-pane label="数据导入导出" name="fifth">
-      
-
+    <el-tab-pane label="数据统计" name="fourth">
+    
 
     </el-tab-pane>
   </el-tabs>
@@ -38,19 +32,21 @@ export default {
     components: { TRRecord, TRDayAnalyzeVue, TRLabels },
     data() {
       return {
-        activeNameArr: ['first',"second","third","fourth","fifth"],
-        activeIndex: 0,
-        activeName: 'first'
+        activeNameArr: ['first',"second","third","fourth"],  //当前标签页的name集合
+        activeIndex: 0,  //当前激活的标签页下标
+        activeName: 'first'  //绑定Tabs组件的激活标签
       }
     },
     watch:{
+      //当activeIndex变化时，切换Tabs组件的标签页
       activeIndex(){
         this.activeName = this.activeNameArr[this.activeIndex]
       }
     },
     mounted(){
-      mousetrap.bind('ctrl+tab', ()=>{
-        this.activeIndex = this.activeIndex == 4 ? 1 : this.activeIndex+1
+      //绑定ctrl+tab快捷键切换Tab 
+      mousetrap.bind('绑定ctrl+tab快捷键', ()=>{
+        this.activeIndex = (this.activeIndex === this.activeNameArr.length -1)  ? 0 : this.activeIndex+1
       })
     }
 }
