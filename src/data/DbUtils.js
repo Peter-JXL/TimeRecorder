@@ -7,11 +7,12 @@ const knex = require('knex')({
 });
 const moment = require("moment")
 
+//获取所有一级标签
 function getFirstLabel() {
     return knex.from('labelTable').select("firstLabel").groupBy('firstLabel')
 }
 
-
+//获取所有二级标签
 function getSecondLabel(firstLabel) {
     return knex.from('labelTable').select("secondLabel").where('firstLabel', '=', firstLabel)
 }
@@ -67,7 +68,7 @@ function deleteOneTime(ID) {
     return knex('dataTable').where('ID', ID).del()
 }
 
-// 删除一条时间记录
+// 删除一条标签
 function deleteOneLabel(ID) {
     return knex('labelTable').where('ID', ID).del()
 }
@@ -85,7 +86,12 @@ function statOneDayTime(recordDate) {
         where('recordDate', 'like', `%${recordDate}%`);
 }
 
-
+//统计一天当中每个标签所花的时间，其中未记录的作为单独一个标签
+function statDasyTime(recordDate) {
+    return knex.from('dataTable').
+        select("ID", "recordDate", 'beginTime', 'endTime', 'firstLabel', 'secondLabel', 'timeNote').
+        where('recordDate', 'like', `%${recordDate}%`);
+}
 export default {
     getFirstLabel,
     getSecondLabel,
@@ -97,7 +103,7 @@ export default {
     deleteOneLabel,
     deleteOneTime,
     updateLabel,
-    statOneDayTime
-
+    statOneDayTime,
+    statDasyTime
 }
 
