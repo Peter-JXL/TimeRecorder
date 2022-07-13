@@ -113,6 +113,8 @@ export default {
     loadDayTime(){
       this.tableData = this.tableData.splice(0, 0)   //清空原始数据
       DbUtils.getOneDayData(this.caldayChoose).then((rows)=>{
+
+        //填充当天数据到表格里
         rows.forEach(row=>{
           this.tableData.push({
             ID: row['ID'],
@@ -123,6 +125,10 @@ export default {
             timeNote: row['timeNote']
           })
         })
+        //将当天最后一条记录的时间填充到时间输入框里，方便用户录入下一条时间
+        let lastRecord = rows[rows.length - 1]
+        this.beginTime = this.endTime = moment(lastRecord['endTime']).format('HH:mm')
+        this.$refs.endTime.focus
       })
     },
     //删除一条时间记录
@@ -402,11 +408,11 @@ export default {
 }
 
 .inputDate{
-
+  width: 124px;
 }
 
 .inputTime{
-
+  width: 80px;
 }
 
 </style>
