@@ -87,10 +87,10 @@ function statOneDayTime(recordDate) {
 }
 
 //统计一段时间中每个标签所花的时间，其中未记录的作为单独一个标签
-function statDasyTime(recordDate) {
+function statDasyTime(beginDate, endDate) {
     return knex.from('dataTable').
         select("ID", "recordDate", 'beginTime', 'endTime', 'firstLabel', 'secondLabel', 'timeNote').
-        where('recordDate', 'like', `%${recordDate}%`);
+        whereBetween('recordDate', [beginDate, endDate]);
 }
 export default {
     getFirstLabel,
