@@ -113,7 +113,6 @@ export default {
     loadDayTime(){
       this.tableData = this.tableData.splice(0, 0)   //清空原始数据
       DbUtils.getOneDayData(this.caldayChoose).then((rows)=>{
-
         //填充当天数据到表格里
         rows.forEach(row=>{
           this.tableData.push({
@@ -126,9 +125,17 @@ export default {
           })
         })
         //将当天最后一条记录的时间填充到时间输入框里，方便用户录入下一条时间
-        let lastRecord = rows[rows.length - 1]
-        this.beginTime = this.endTime = moment(lastRecord['endTime']).format('HH:mm')
-        this.$refs.endTime.focus
+        if(0 !== rows.length ){  //当日没记录时间
+          let lastRecord = rows[rows.length - 1]
+          this.beginTime = moment(lastRecord['endTime']).format('HH:mm')
+          this.endTime = moment(lastRecord['endTime']).format('HH:mm')  
+          this.$refs.endTime.focus()
+        }else{
+          this.beginTime = this.endTime = '00:00'          
+          this.$nextTick( ()=>{
+            this.$refs.endTime.focus()
+          });
+        } 
       })
     },
     //删除一条时间记录
@@ -240,12 +247,6 @@ export default {
       var result = conveter.makeMarkdown(tableElement)
       clipboard.writeText(result)
     },
-    changeBeginDate(){
-        this.dateObj.beginTime = new Date(this.dateObj.beginDate.setDate(this.dateObj.beginDate.getDate()))
-    },
-    changeEndDate(){
-        this.dateObj.endTime = new Date(this.dateObj.endDate.setDate(this.dateObj.endDate.getDate()))
-    }
   },
   //启动时自动加载当天数据
   mounted() {
