@@ -17,15 +17,15 @@
 
         <el-form-item label="图表类型：">
           <el-radio-group v-model="chartType">
-            <el-radio label="pie">饼图</el-radio>
-            <el-radio label="pie2">圆环图</el-radio>
-            <el-radio label="bar">柱状图</el-radio>
-            <el-radio label="funnel">漏斗图</el-radio>
+            <el-radio label="pie" >饼图</el-radio>
+            <el-radio label="pie2" disabled>圆环图</el-radio>
+            <el-radio label="bar" disabled>柱状图</el-radio>
+            <el-radio label="funnel" disabled>漏斗图</el-radio>
           </el-radio-group>
         </el-form-item>
 
         <el-form-item label="图表设置：">
-          <el-checkbox v-model="showToolTip" label="显示图例" size="large" />
+          <el-checkbox v-model="showLegend" label="显示图例" size="large" />
         </el-form-item>
 
         <el-form-item >
@@ -46,31 +46,33 @@ export default {
   name: 'TRDaysAnalyze',
   data() {
     return {
-      beginDate: '',
-      endDate: '',
-      chartType: 'pie',
-      showToolTip: true,
+      beginDate: '',  //统计开始日期（含）
+      endDate: '',    //统计结束日期（含）
+      chartType: 'pie',  //图表类型
+      showLegend: true,  //是否显示图例
       charOption: {
         title: {
-          text: "当日数据统计",
+          text: "数据统计", //图表标题
         },
-        tooltip: {
-          show: true,
-          trigger: "item",
-          formatter: '{b} {c}分钟  占比{d}%'
+        tooltip: { //鼠标放到图标上时的提示
+          show: true,  //是否显示
+          trigger: "item",  //放到哪里时显示，数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。
+          formatter: '{b} {c}分钟  占比{d}%'   //提示的格式  饼图、仪表盘、漏斗图: {a}（系列名称），{b}（数据项名称），{c}（数值）, {d}（百分比）
         },
         legend: {
-          top: "5%",
-          left: "center",
+          show: true,
+          top: "center",
+          left: "0%",
+          orient: 'vertical'  //图例竖着显示
         },
-        toolbox: {
-          feature: {
-            saveAsImage: {}
+        toolbox: { //工具箱
+          feature: { 
+            saveAsImage: {}  //下载图片
           }
         },
         series: [
           {
-            name: "当日数据统计",
+            name: "数据统计",
             type: "pie",
             radius: "50%",
             label:{
@@ -98,8 +100,9 @@ export default {
         case 'funnel' : this.loadFunnel(); break;
       }
     },
-    showToolTip(){
-       
+    showLegend(){
+      this.charOption.legend.show = !this.charOption.legend.show
+      myChart.setOption(this.charOption);
     }
   },
   methods: {
@@ -147,13 +150,16 @@ export default {
       })
     },
     loadPie(){
-
+      this.charOption.series[0].type = 'pie'
+      myChart.setOption(this.charOption);
     },
     loadPie2(){
 
     },
     loadBar(){
-
+      this.charOption.series[0].type = 'bar'
+      console.log(this.charOption);
+      myChart.setOption(this.charOption);
     },
     loadFunnel(){
 
