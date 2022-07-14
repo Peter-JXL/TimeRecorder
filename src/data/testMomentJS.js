@@ -14,3 +14,7 @@ console.log(timeSpan.asMinutes());
 let s = t1.format('YYYY-MM-DD ').toString()
 console.log(s);
 
+let endDate =  moment('2022-05-31', "YYYY-MM-DD");
+endDate = endDate.add(12,'d')
+console.log(endDate, 'endDate');
+console.log(endDate.format("YYYY-MM-DD"));
