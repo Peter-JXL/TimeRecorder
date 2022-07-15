@@ -13,7 +13,7 @@ module.exports = defineConfig({
         productName: 'TimeRecorder',
         copyright: 'Copyright © 2022',
         win: {
-          icon: './TimeRecorder.ico',
+          icon: './public/TimeRecorder.ico',
           target: "portable"
         },
         extraResources: {

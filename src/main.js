@@ -10,7 +10,6 @@ Initsqlite3db.InitDb()
 const app = createApp(App)
 app.config.globalProperties.$echarts = echarts
 
-// app.component('VueEcharts', ECharts)
 //ElementUI组件国际化配置为中文
 app.use(ElementPlus, {
     locale: zhCn,
