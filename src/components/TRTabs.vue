@@ -46,8 +46,11 @@ export default {
     },
     mounted(){
       //绑定ctrl+tab快捷键切换Tab 
-      mousetrap.bind('绑定ctrl+tab快捷键', ()=>{
+      mousetrap.bind('ctrl+tab', ()=>{
         this.activeIndex = (this.activeIndex === this.activeNameArr.length -1)  ? 0 : this.activeIndex+1
+      })
+       mousetrap.bind('ctrl+shift+tab', ()=>{
+        this.activeIndex = (this.activeIndex === 0)  ? this.activeNameArr.length - 1 : this.activeIndex-1
       })
     }
 }
