@@ -2,6 +2,7 @@
 
 import { app, protocol, BrowserWindow, Menu, globalShortcut  } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import autoUpdater from './utils/update'
 const path = require('path')
 // import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer' 取消导入
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -70,6 +71,9 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }*/
+  if (process.env.NODE_ENV === 'production') {
+    autoUpdater.checkForUpdates()
+  }
   globalShortcut.register('CommandOrControl+Shift+i', function () {
     win.webContents.openDevTools()
   })
