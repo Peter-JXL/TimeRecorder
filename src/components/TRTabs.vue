@@ -35,7 +35,7 @@ export default {
       return {
         activeNameArr: ['first',"second","third","fourth"],  //当前标签页的name集合
         activeIndex: 0,  //当前激活的标签页下标
-        activeName: 'fourth'  //绑定Tabs组件的激活标签
+        activeName: 'first'  //绑定Tabs组件的激活标签
       }
     },
     watch:{
