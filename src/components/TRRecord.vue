@@ -81,6 +81,7 @@ import emitter from "@/utils/bus"
 const {clipboard} = require('electron')
 import showdown from 'showdown'
 import moment from 'moment'
+import { ElMessage  } from 'element-plus'
 
 export default {
   name: "TRRecord",  
@@ -199,6 +200,11 @@ export default {
         this.$nextTick(()=>{
           this.beginTime = this.endTime
           this.$refs.endTime.focus()
+          this.timeNote = ''
+          ElMessage({
+            message:'成功添加',
+            type: 'success'
+          })
         })
       })
     },  
