@@ -42,22 +42,15 @@ function insertLabel(label) {
 
 
 //更新一条时间记录
-function updateOneTime({ ID, recordDate, beginTime, endTime, firstLabel, secondLabel, timeNote }) {
-    knex('dataTable')
+function updateOneTime({ ID, beginTime, endTime, firstLabel, secondLabel, timeNote }) {
+    return knex('dataTable')
         .where('ID', '=', ID)
         .update({
-            recordDate,
             beginTime,
             endTime,
             firstLabel,
             secondLabel,
             timeNote
-        }).then(() => {
-            console.log('update Time Table Success');
-        })
-        .catch((err) => {
-            console.log(err);
-            throw err
         })
 
 

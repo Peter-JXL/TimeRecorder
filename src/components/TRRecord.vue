@@ -10,12 +10,18 @@
       :cell-style="{'text-align':'center'}"
       show-overflow-tooltip="true"
       :default-sort="{ prop: 'date', order: 'descending' }"
+      @cell-dblclick="editTimeData"
       >
         <el-table-column prop="beginTime" label="开始时间" width="110" sortable />
         <el-table-column prop="endTime" label="结束时间" width="110" sortable/>
         <el-table-column prop="firstLabel" label="一级标签" width="110" sortable />
         <el-table-column prop="secondLabel" label="二级标签" width="110" sortable />
-        <el-table-column prop="timeNote" label="备注" width="150" />
+        <el-table-column prop="timeNote" label="备注" width="150">
+          <template #default="scope">
+            <el-input v-if="scope.row['isShow']" v-model="scope.row.timeNote" @blur="updateTimeNote(scope.row)" />
+            <span v-else>{{scope.row.timeNote}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="100" >
           <template #default="scope">
               <el-button size="small" @click="deleteOneTime(scope.row.ID)">删除</el-button>
@@ -208,6 +214,23 @@ export default {
         })
       })
     },  
+    editTimeData(row){
+      row['isShow'] = true
+    },
+    //修改一条时间记录
+    updateTimeNote(row){
+       let {ID, timeNote } = row
+      DbUtils.updateOneTime({
+        ID,
+        timeNote
+      }).then(()=>{
+        ElMessage({
+          message:'修改成功',
+          type: 'success'
+        })
+        row['isShow'] = false
+      })
+    },
     //当用户输入的备注里包含二级标签的时候，自动填充一级和二级标签
     timeNoteChange(){
       this.allLabels.forEach( label =>{
