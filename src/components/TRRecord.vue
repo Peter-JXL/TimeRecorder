@@ -233,12 +233,15 @@ export default {
     },
     //当用户输入的备注里包含二级标签的时候，自动填充一级和二级标签
     timeNoteChange(){
-      this.allLabels.forEach( label =>{
-        if(-1 !== label.timeNote.indexOf(this.timeNote)){
-          this.firstLabelChoose = label.firstLabel
-          this.secondLabelChoose = label.secondLabel
-        }
-      })
+      if(''!== this.timeNote){
+        console.log(this.timeNote);
+        this.allLabels.forEach( label =>{
+          if(-1 !== label.timeNote.indexOf(this.timeNote)){
+            this.firstLabelChoose = label.firstLabel
+            this.secondLabelChoose = label.secondLabel
+          }
+        })
+      }
     },
     //根据当天日期数据生成一个table dom元素
     createTable(tableData){
