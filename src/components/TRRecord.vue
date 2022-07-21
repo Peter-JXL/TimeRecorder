@@ -48,7 +48,7 @@
         </el-form-item>
 
         <el-form-item label="结束时间：">
-          <input type="date" v-model="endDate" class="myInput inputDate">
+          <input type="date" v-model="endDate" class="myInput inputDate" @keydown.enter="$refs.timeNote.focus()">
           <input type="time" v-model="endTime" class="myInput inputTime" ref="endTime" @keydown.enter="$refs.timeNote.focus()" >
         </el-form-item>
 
