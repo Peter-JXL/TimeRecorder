@@ -47,6 +47,7 @@ var template = [
             shell.openExternal('http://peterjxl.com')
           }
         },
+        {type: 'separator'},
         {label:'反馈'},
         {label:'检查更新'},
         {label:'关于'},
