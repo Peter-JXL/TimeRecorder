@@ -70,7 +70,7 @@
         </el-form-item>
 
         <el-form-item >
-            <el-button type="primary" @click="addOneTime">添加</el-button>
+            <el-button type="primary" @click="addOneTime" ref="addOneTime">添加</el-button>
             <el-button type="primary" @click="copyOneDayDataToMarkdown">复制当日记录</el-button>    
         </el-form-item>
       </el-form>
@@ -234,7 +234,6 @@ export default {
     //当用户输入的备注里包含二级标签的时候，自动填充一级和二级标签
     timeNoteChange(){
       if(''!== this.timeNote){
-        console.log(this.timeNote);
         this.allLabels.forEach( label =>{
           if(-1 !== label.timeNote.indexOf(this.timeNote)){
             this.firstLabelChoose = label.firstLabel

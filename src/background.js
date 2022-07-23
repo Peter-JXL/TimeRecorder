@@ -1,8 +1,9 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Menu, globalShortcut  } from 'electron'
+import { app, protocol, BrowserWindow, globalShortcut  } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import autoUpdater from './utils/update'
+require('./menu')
 const path = require('path')
 // import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer' 取消导入
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -42,12 +43,12 @@ async function createWindow() {
     win.loadURL('app://./index.html')
   }
 }
-Menu.setApplicationMenu(null)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
+  globalShortcut.unregisterAll()  //程序退出时取消注册所有快捷键
   if (process.platform !== 'darwin') {
     app.quit()
   }
