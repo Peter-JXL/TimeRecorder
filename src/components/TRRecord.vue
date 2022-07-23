@@ -66,11 +66,14 @@
        </el-form-item>
 
         <el-form-item label="备注：" >
-          <el-input ref="timeNote" v-model="timeNote" type="text" clearable  style="width:240px" @input="timeNoteChange"></el-input>
+          <el-input ref="timeNote" v-model="timeNote" 
+                    type="text" clearable  style="width:240px" @input="timeNoteChange"
+                    @keydown.enter="$refs.addOneTime1.focus()" >
+          </el-input>
         </el-form-item>
 
         <el-form-item >
-            <el-button type="primary" @click="addOneTime" ref="addOneTime">添加</el-button>
+            <el-button type="primary" @click="addOneTime" ref="addOneTime1">添加</el-button>
             <el-button type="primary" @click="copyOneDayDataToMarkdown">复制当日记录</el-button>    
         </el-form-item>
       </el-form>
