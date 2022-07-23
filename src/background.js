@@ -1,14 +1,57 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, globalShortcut  } from 'electron'
+import { app, protocol, BrowserWindow,  Menu, globalShortcut  } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import autoUpdater from './utils/update'
-require('./menu')
+
+
+
 const path = require('path')
 // import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer' 取消导入
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
-let win
+let win  //接受主窗口变量
+
+//菜单相关  因为想要绑定快捷键F12打开控制台，需要用到win变量
+var template = [
+  {
+      label:'文件',
+      submenu:[
+          {label:'打开程序目录'},
+          {label:'关闭'}
+      ]
+  },
+  {
+      label:'主题',
+      submenu:[
+          {label:'明亮主题'},
+          {label:'暗色主题'}
+      ]
+  },
+  {
+    label:'帮助',
+    submenu:[
+        {
+          label:'打开/关闭控制台',
+          accelerator:`F12`,
+          click:()=>{
+            win.webContents.toggleDevTools()
+          }
+        },
+        {label:'鸣谢'},
+        {label:'更新日志'},
+        {label:'隐私条款'},
+        {label:'网站'},
+        {label:'反馈'},
+        {label:'检查更新'},
+        {label:'关于'},
+    ]
+  }
+]
+var m = Menu.buildFromTemplate(template)
+Menu.setApplicationMenu(m)
+
+
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -75,9 +118,6 @@ app.on('ready', async () => {
   if (process.env.NODE_ENV === 'production') {
     autoUpdater.checkForUpdates()
   }
-  globalShortcut.register('CommandOrControl+Shift+i', function () {
-    win.webContents.openDevTools()
-  })
   createWindow()
 })
 
