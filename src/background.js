@@ -18,7 +18,12 @@ var template = [
       label:'文件',
       submenu:[
           {label:'打开程序目录'},
-          {label:'关闭'}
+          {
+            label:'关闭',
+            click:()=>{
+              win.close()
+            }
+          }
       ]
   },
   {
