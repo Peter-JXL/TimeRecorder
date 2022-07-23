@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow,  Menu, globalShortcut  } from 'electron'
+import { app, protocol, BrowserWindow,  Menu, globalShortcut, shell  } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import autoUpdater from './utils/update'
 
@@ -41,7 +41,12 @@ var template = [
         {label:'鸣谢'},
         {label:'更新日志'},
         {label:'隐私条款'},
-        {label:'网站'},
+        {
+          label:'网站',
+          click:()=>{
+            shell.openExternal('http://peterjxl.com')
+          }
+        },
         {label:'反馈'},
         {label:'检查更新'},
         {label:'关于'},
