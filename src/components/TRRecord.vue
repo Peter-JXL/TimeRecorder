@@ -68,7 +68,7 @@
         <el-form-item label="备注：" >
           <el-input ref="timeNote" v-model="timeNote" 
                     type="text" clearable  style="width:240px" @input="timeNoteChange"
-                    @keydown.enter="$refs.addOneTime1.focus()" >
+                    @keydown.enter="$refs.addOneTime1.ref.focus()" >
           </el-input>
         </el-form-item>
 
@@ -146,6 +146,9 @@ export default {
             this.$refs.endTime.focus()
           });
         } 
+        
+        //当数据有insert或者delete的时候，都会调用loadDayTime方法，然后触发事件告诉当日时间标签栏更新数据
+        emitter.emit('sendCaldayChoose', this.caldayChoose)  
       })
     },
     //删除一条时间记录
@@ -168,6 +171,8 @@ export default {
     },
     //加载全部标签，用于备注变化的时候填充下拉框
     loadAllLabels(){
+      console.log('加载全部标签');      
+      this.allLabels = this.allLabels.splice(0,0) //清空原始数据
       DbUtils.getAllLabel().then((rows)=>{
         rows.forEach( row => {
           this.allLabels.push(row)
@@ -289,10 +294,15 @@ export default {
     this.loadAllLabels()
     this.loadFirstLabels()    
     emitter.emit('sendCaldayChoose', this.caldayChoose)
+
+    emitter.on("sendLabels", () => {  //当标签页数据有更新的时候，更新当前标签数据
+      this.loadAllLabels()
+    });
   },
   //销毁时取消事件总线
   onBeforeUnmount(){
     emitter.all.delete("sendCaldayChoose")
+    emitter.all.delete("sendLabels")
   }
 };
 </script>

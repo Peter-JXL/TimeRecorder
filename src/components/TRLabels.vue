@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import emitter from "@/utils/bus"
 import DbUtils from '@/data/DbUtils'
 import { ElMessage  } from 'element-plus'
 
@@ -81,7 +82,7 @@ export default {
       DbUtils.getAllLabel().then((rows)=>{
         rows.forEach( row => {
           this.allLabels.push(row)
-        })
+        })        
       })
     },
     deleteOneLabel(ID){
@@ -105,11 +106,16 @@ export default {
           type: 'success'
         })
         row['isShow'] = false
+        emitter.emit('sendLabels')
       })
     }
   },
   mounted() {
     this.loadLabelsData()
+  },
+  //销毁时取消事件总线
+  onBeforeUnmount(){
+    emitter.all.delete("sendLabels")
   }
 }
 </script>
