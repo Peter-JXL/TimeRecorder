@@ -59,10 +59,12 @@ export default {
       const oneDayMinutes = 24 * 60; //一天有多少分钟
       let recordDateMinutes = 0;
       var labelTimeMap;
-      this.charOption.series[0].data = this.charOption.series[0].data.slice(0,0)  //清空原本的数据
-      this.charOption.title.text =  moment( this.caldayChoose).format('YYYY-MM-DD').toString() + '日的数据统计'
-      DbUtils.statOneDayTime(this.caldayChoose).then((rows) => {
+
+      DbUtils.statOneDayTime(this.caldayChoose).then((rows) => {       
+        this.charOption.series[0].data = this.charOption.series[0].data.slice(0,0)  //清空原本的数据        
+        this.charOption.title.text =  moment( this.caldayChoose).format('YYYY-MM-DD').toString() + '日的数据统计'
         labelTimeMap = new Map();
+
         rows.forEach((row) => {
           var firstLabel = row["firstLabel"];
           var beginTime = moment(row["beginTime"], "YYYY-MM-DD HH:mm");
