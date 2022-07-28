@@ -96,7 +96,7 @@ export default {
   name: "TRRecord",  
   data() {
     return {
-      tableData: [],   //一天的时间记录d
+      tableData: [],   //一天的时间记录
       caldayChoose: new Date(),  //日历里的日期
       beginDate: '',      
       beginTime: '',
@@ -171,7 +171,6 @@ export default {
     },
     //加载全部标签，用于备注变化的时候填充下拉框
     loadAllLabels(){
-      console.log('加载全部标签');      
       this.allLabels = this.allLabels.splice(0,0) //清空原始数据
       DbUtils.getAllLabel().then((rows)=>{
         rows.forEach( row => {
@@ -293,9 +292,10 @@ export default {
     this.loadDayTime()
     this.loadAllLabels()
     this.loadFirstLabels()    
-    emitter.emit('sendCaldayChoose', this.caldayChoose)
+    emitter.emit('sendCaldayChoose', this.caldayChoose)    
 
-    emitter.on("sendLabels", () => {  //当标签页数据有更新的时候，更新当前标签数据
+    //监听标签表更新事件，当标签页数据有更新的时候，更新当前标签数据
+    emitter.on("sendLabels", () => {  
       this.loadAllLabels()
     });
   },

@@ -116,6 +116,7 @@ export default {
   //销毁时取消事件总线
   onBeforeUnmount(){
     emitter.all.delete("sendLabels")
+    emitter.all.delete("sendCaldayChoose")
   }
 }
 </script>
