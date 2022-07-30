@@ -154,7 +154,11 @@ export default {
     //删除一条时间记录
     deleteOneTime(ID){
       DbUtils.deleteOneTime(ID).then(()=>{
-        this.loadDayTime()
+        this.loadDayTime();
+        ElMessage({
+          message:'删除成功',
+          type: 'success'
+        })
       })
     },
     //加载一级标签并填充到下拉框
