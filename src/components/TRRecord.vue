@@ -231,14 +231,8 @@ export default {
     //修改一条时间记录
     updateTimeNote(row){
        let {ID, timeNote } = row
-      DbUtils.updateOneTime({
-        ID,
-        timeNote
-      }).then(()=>{
-        ElMessage({
-          message:'修改成功',
-          type: 'success'
-        })
+      DbUtils.updateOneTime({ID, timeNote}).then(()=>{
+        ElMessage({message:'修改成功', type: 'success'})
         row['isShow'] = false
       })
     },
@@ -269,9 +263,10 @@ export default {
         thead.rows[0].cells[i].appendChild(document.createTextNode(arr[i]))
       }
 
+      let fisrtLabels = ['学习成长', '事业']
       for(let i = 0, j = 0; i<tableData.length; i++){
 
-        if(this.tableData[i].firstLabel === '学习成长'){
+        if(fisrtLabels.includes( this.tableData[i].firstLabel )){
           tbody.insertRow(j)  // J用于table dom元素的插入下标
           tbody.rows[j].insertCell(0)
           tbody.rows[j].cells[0].appendChild(document.createTextNode(this.tableData[i].beginTime))
