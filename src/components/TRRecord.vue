@@ -74,7 +74,7 @@
 
         <el-form-item >
             <el-button type="primary" @click="addOneTime" ref="addOneTime1">添加</el-button>
-            <el-button type="primary" @click="copyOneDayDataToMarkdown">复制当日记录</el-button>    
+            <el-button type="primary" @click="copyOneDayDataToMarkdown">复制当日学习记录</el-button>    
         </el-form-item>
       </el-form>
 
@@ -259,7 +259,9 @@ export default {
       var thead = table.createTHead()
       var tbody = table.createTBody()
 
-      thead.insertRow(0)
+
+      
+      thead.insertRow(0)      
       var arr = ["开始时间","结束时间","一级标签","二级标签","备注"]
       for(let i = 0; i < arr.length; i++){
         var th = document.createElement('th')
@@ -267,18 +269,22 @@ export default {
         thead.rows[0].cells[i].appendChild(document.createTextNode(arr[i]))
       }
 
-      for(let i = 0; i<tableData.length; i++){
-        tbody.insertRow(i)
-        tbody.rows[i].insertCell(0)
-        tbody.rows[i].cells[0].appendChild(document.createTextNode(this.tableData[i].beginTime))
-        tbody.rows[i].insertCell(1)
-        tbody.rows[i].cells[1].appendChild(document.createTextNode(this.tableData[i].endTime))
-        tbody.rows[i].insertCell(2)
-        tbody.rows[i].cells[2].appendChild(document.createTextNode(this.tableData[i].firstLabel))
-        tbody.rows[i].insertCell(3)
-        tbody.rows[i].cells[3].appendChild(document.createTextNode(this.tableData[i].secondLabel))
-        tbody.rows[i].insertCell(4)
-        tbody.rows[i].cells[4].appendChild(document.createTextNode(this.tableData[i].timeNote))
+      for(let i = 0, j = 0; i<tableData.length; i++){
+
+        if(this.tableData[i].firstLabel === '学习成长'){
+          tbody.insertRow(j)  // J用于table dom元素的插入下标
+          tbody.rows[j].insertCell(0)
+          tbody.rows[j].cells[0].appendChild(document.createTextNode(this.tableData[i].beginTime))
+          tbody.rows[j].insertCell(1)
+          tbody.rows[j].cells[1].appendChild(document.createTextNode(this.tableData[i].endTime))
+          tbody.rows[j].insertCell(2)
+          tbody.rows[j].cells[2].appendChild(document.createTextNode(this.tableData[i].firstLabel))
+          tbody.rows[j].insertCell(3)
+          tbody.rows[j].cells[3].appendChild(document.createTextNode(this.tableData[i].secondLabel))
+          tbody.rows[j].insertCell(4)
+          tbody.rows[j].cells[4].appendChild(document.createTextNode(this.tableData[i].timeNote))
+          j++;
+        }        
       }      
       return table    
     },
