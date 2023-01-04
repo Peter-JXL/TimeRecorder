@@ -73,7 +73,7 @@ async function createWindow() {
   // Create the browser window.
     win = new BrowserWindow({
     title:'TimeRecorder, 记录你的时间',
-    width: 1200,
+    width: 1300,
     height: 700,
     center: true,
     resizable: false,

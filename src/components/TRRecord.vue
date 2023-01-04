@@ -36,9 +36,13 @@
         <el-calendar id='customizedCalendar'  v-model="caldayChoose" />
       </el-form-item>
       <el-form-item id="button">
-        <el-button @click="skip('preDay')" type="success" round size="small">前一天</el-button>
+        <el-button @click="skip('preYear')" type="success" round size="small">←年</el-button>
+        <el-button @click="skip('preMonth')" type="success" round size="small">←月</el-button>
+        <el-button @click="skip('preDay')" type="success" round size="small">←天</el-button>
         <el-button @click="skip('today')" type="info" round size="small">今天</el-button>
-        <el-button @click="skip('postDay')" type="warning" round size="small">后一天</el-button>
+        <el-button @click="skip('postDay')" type="warning" round size="small">→天</el-button>
+        <el-button @click="skip('postMonth')" type="warning" round size="small">→月</el-button>
+        <el-button @click="skip('postYear')" type="warning" round size="small">→年</el-button>
       </el-form-item>
 
       <el-form label-width="150px">
@@ -104,10 +108,10 @@ export default {
       endTime:'',
       firstLabelChoose: '',   //用户选择的一级标签
       secondLabelChoose: '',  //用户选择的二级标签
-      timeNote: '',           // 用户输入的时间备注
+      timeNote: '',           //用户输入的时间备注
       fisrtLabels: [],        //标签表里的所有一级标签，用于填充下拉框
       secondLabels: [],       //标签表里所有的二级标签，用于填充下拉框
-      allLabels:new Map(),           //标签表里所有的数据，用于在备注变化时更新标签选择框
+      allLabels: new Map(),   //标签表里所有的数据，用于在备注变化时更新标签选择框
     };
   },
   watch: {
@@ -201,10 +205,16 @@ export default {
     },
     //日历组件当前日期变化
     skip(flag) {
-      if (flag === 'preYear') this.caldayChoose = new Date(this.caldayChoose.setFullYear(this.caldayChoose.getFullYear() - 1));
-      else if (flag === 'preDay') this.caldayChoose = new Date(this.caldayChoose.setDate(this.caldayChoose.getDate() - 1));
-      else if (flag === 'today') this.caldayChoose = new Date();
-      else if (flag === 'postDay') this.caldayChoose = new Date(this.caldayChoose.setDate(this.caldayChoose.getDate() + 1));
+      switch(flag){
+        case 'preYear': this.caldayChoose = new Date(this.caldayChoose.setFullYear(this.caldayChoose.getFullYear() - 1)); break
+        case 'preMonth': this.caldayChoose = new Date(this.caldayChoose.setMonth(this.caldayChoose.getMonth() - 1));break
+        case 'preDay': this.caldayChoose = new Date(this.caldayChoose.setDate(this.caldayChoose.getDate() - 1));break
+        case 'today': this.caldayChoose = new Date(); break;
+        case 'postDay': this.caldayChoose = new Date(this.caldayChoose.setDate(this.caldayChoose.getDate() + 1));break
+        case 'postMonth': this.caldayChoose = new Date(this.caldayChoose.setMonth(this.caldayChoose.getMonth() + 1));break
+        case 'postYear': this.caldayChoose = new Date(this.caldayChoose.setFullYear(this.caldayChoose.getFullYear() + 1));break
+        default: break;
+      }
     },
     //添加一条时间记录
     addOneTime(){
@@ -319,12 +329,12 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: space-between;
-  width: 1200px;
+  width: 1300px;
   height: 580px;
 }
 
 #TRRecordLeft{
-  width: 750px;
+  width: 800px;
   height: 500px;
 }
 
@@ -334,13 +344,12 @@ export default {
   justify-content: center;
   align-items: center;
 
-  width: 400px;
+  width: 450px;
   height: 580px;
 
   #button{
     display: flex;
     justify-content: center;
-
   }
 }
 
@@ -386,6 +395,7 @@ export default {
         p {
           // 选中日期颜色
           color: black;
+          background-color: blue;
         }
       }
     }
@@ -411,10 +421,8 @@ export default {
 
   :deep(.el-calendar-table__row) {
 
-    .prev,
-    .next {
-
-      // 修改非本月
+    .prev,.next {
+      // 修改非本月日期颜色
       .el-calendar-day {
         p {
           color: #f0d9d5;
@@ -423,7 +431,6 @@ export default {
     }
 
     td {
-
       // 修改每一个日期td标签
       &:first-child,
       &:last-child {
@@ -455,7 +462,6 @@ export default {
 }
 .myInput:hover{
   border-color: #c0c4cc;
-
 }
 
 .inputDate{
