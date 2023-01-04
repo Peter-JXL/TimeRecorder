@@ -107,15 +107,15 @@ export default {
       timeNote: '',           // 用户输入的时间备注
       fisrtLabels: [],        //标签表里的所有一级标签，用于填充下拉框
       secondLabels: [],       //标签表里所有的二级标签，用于填充下拉框
-      allLabels:[],           //标签表里所有的数据，用于在备注变化时更新标签选择框
+      allLabels:new Map(),           //标签表里所有的数据，用于在备注变化时更新标签选择框
     };
   },
   watch: {
     caldayChoose(){
-        this.loadDayTime()
-        emitter.emit('sendCaldayChoose', this.caldayChoose)  //将日历选中的日期发给当日时间分析组件，用于展示饼图
-        this.beginDate = moment(this.caldayChoose).format('yyyy-MM-DD')
-        this.endDate = moment(this.caldayChoose).format('yyyy-MM-DD')
+      this.loadDayTime()
+      emitter.emit('sendCaldayChoose', this.caldayChoose)  //将日历选中的日期发给当日时间分析组件，用于展示饼图
+      this.beginDate = moment(this.caldayChoose).format('yyyy-MM-DD')
+      this.endDate = moment(this.caldayChoose).format('yyyy-MM-DD')
     }, 
   },    
   methods: {
@@ -175,17 +175,21 @@ export default {
     },
     //加载全部标签，用于备注变化的时候填充下拉框
     loadAllLabels(){
-      this.allLabels = this.allLabels.splice(0,0) //清空原始数据
+      this.allLabels.clear() //清空原始数据
       DbUtils.getAllLabel().then((rows)=>{
         rows.forEach( row => {
-          this.allLabels.push(row)
+          var secondLabelWords = row['timeNote'].split(" ")
+          for(var word of secondLabelWords){
+            this.allLabels.set(word, row['firstLabel']);
+          }
         })
       })
+      
     },
     //用户选中一级标签的时候，自动填充该一级标签下的二级标签
     loadSecondLabel(){
       this.secondLabelChoose = ''
-      this.secondLabels = this.secondLabels.splice(0, 0)
+      this.secondLabels = this.secondLabels.splice(0, 0)  //清空原始数据
       DbUtils.getSecondLabel(this.firstLabelChoose).then((rows)=>{    
         rows.forEach( row => {
           this.secondLabels.push({
@@ -230,7 +234,7 @@ export default {
     },
     //修改一条时间记录
     updateTimeNote(row){
-       let {ID, timeNote } = row
+      let {ID, timeNote } = row
       DbUtils.updateOneTime({ID, timeNote}).then(()=>{
         ElMessage({message:'修改成功', type: 'success'})
         row['isShow'] = false
@@ -238,13 +242,9 @@ export default {
     },
     //当用户输入的备注里包含二级标签的时候，自动填充一级和二级标签
     timeNoteChange(){
-      if(''!== this.timeNote){
-        this.allLabels.forEach( label =>{
-          if(-1 !== label.timeNote.indexOf(this.timeNote)){
-            this.firstLabelChoose = label.firstLabel
-            this.secondLabelChoose = label.secondLabel
-          }
-        })
+      if(this.allLabels.has(this.timeNote)){
+          this.firstLabelChoose = this.allLabels.get(this.timeNote)
+          this.secondLabelChoose = this.timeNote
       }
     },
     //根据当天日期数据生成一个table dom元素
@@ -289,6 +289,7 @@ export default {
       var conveter = new showdown.Converter({tables: true})
       var result = conveter.makeMarkdown(tableElement)
       clipboard.writeText(result)
+      ElMessage({message:'复制成功', type: 'success'})
     },
   },
   //启动时自动加载当天数据
