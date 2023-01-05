@@ -31,6 +31,9 @@
         <el-form-item >
             <el-button type="primary" @click="statistics">统计</el-button>
         </el-form-item>
+        <el-form-item >
+
+        </el-form-item>
       </el-form>
     </div>
   </div>
@@ -108,57 +111,58 @@ export default {
   methods: {
     //统计开始日期（含）到结束日期（含）之间的数据，每个一级标签花了多少时间
     statistics(){    
-      let beginDate =  moment(this.beginDate, "YYYY-MM-DD");
-      let endDate =  moment(this.endDate, "YYYY-MM-DD").add(1,'d');
-      let days = endDate.diff(beginDate, 'days')
-
+      let beginDate = moment(this.beginDate, "YYYY-MM-DD")
+      let endDate = moment(this.endDate, "YYYY-MM-DD")
+      let days = endDate.diff(beginDate, 'days') + 1   //计算总共多少天
       let daysMinutes = days * 24 * 60; //总共多少分钟
       let recordDateMinutes = 0  //统计用户记录的分钟数
-      let labelTimeMap = new Map();
-      this.charOption.series[0].data = this.charOption.series[0].data.slice(0,0)  //清空原本的数据
+      let labelTimeMap = new Map()  //存放分钟数和标签
+      this.charOption.series[0].data = this.charOption.series[0].data.slice(0,0)  //初始化
 
       DbUtils.statDasyTime(beginDate.format("YYYY-MM-DD"), endDate.format("YYYY-MM-DD")).then( rows =>{
         rows.forEach((row) => {
           var firstLabel = row["firstLabel"];
-          var beginTime = moment(row["beginTime"], "YYYY-MM-DD HH:mm");
-          var endTime = moment(row["endTime"], "YYYY-MM-DD HH:mm");
-          var timeSpan = endTime.diff(beginTime, "minute");
+          var beginTime = moment(row["beginTime"], "YYYY-MM-DD HH:mm")
+          var endTime = moment(row["endTime"], "YYYY-MM-DD HH:mm")
+          var timeSpan = endTime.diff(beginTime, "minute")
 
           if (labelTimeMap.has(firstLabel)) {
             labelTimeMap.set(firstLabel,labelTimeMap.get(firstLabel) + timeSpan);
           } else {
-            labelTimeMap.set(firstLabel, timeSpan, labelTimeMap);
+            labelTimeMap.set(firstLabel, timeSpan);
           }
           recordDateMinutes += timeSpan;
-        });
+        })
 
         //不相等则说明用户有未记录的时间，或者多记录的时间
         if (recordDateMinutes !== daysMinutes) {
+          this.$log.info("TRDaysAnalyze recordDateMinutes: " + recordDateMinutes);
+          this.$log.info("TRDaysAnalyze oneDayMinutes: " + daysMinutes);
           let errLabel = recordDateMinutes < daysMinutes ? "未记录的时间" : "多记录的时间"; //检查用户是少记录了时间还是多记录了时间
           labelTimeMap.set(errLabel, Math.abs(recordDateMinutes - daysMinutes));
         }
 
-        //将
+        //将计算好的数据放到图表里
         labelTimeMap.forEach((value,key ) => {
           this.charOption.series[0].data.unshift({
             value: value,
             name: key,
-          });
-        });
+          })
+        })
         
         myChart.setOption(this.charOption);
       })
     },
     loadPie(){
       this.charOption.series[0].type = 'pie'
-      myChart.setOption(this.charOption);
+      myChart.setOption(this.charOption)
     },
     loadPie2(){
 
     },
     loadBar(){
       this.charOption.series[0].type = 'bar'
-      console.log(this.charOption);
+      console.log(this.charOption)
       myChart.setOption(this.charOption);
     },
     loadFunnel(){
@@ -166,7 +170,7 @@ export default {
     },
   },
   mounted() {
-    myChart = this.$echarts.init(document.getElementById("chinaChartDays"));
+    myChart = this.$echarts.init(document.getElementById("chinaChartDays"))
     this.beginDate = this.endDate = moment().format('YYYY-MM-DD')
     this.statistics()
   },
