@@ -31,14 +31,14 @@
         <el-form-item >
             <el-button type="primary" @click="statistics">统计</el-button>
         </el-form-item>
-        <el-form-item >
-          <ul>
-            <li>统计总天数：{{this.summary.recordDays}}</li>
-            <li>统计总分钟数：{{this.summary.minutesOfrecordDays}}</li>
-            <li>记录的总分钟数：{{this.summary.minutesOfUserRecord}}</li>
-          </ul>
-        </el-form-item>
+
+        <ul>
+          <li>统计总天数：{{this.summary.recordDays}}</li>
+          <li>统计总分钟数：{{this.summary.minutesOfrecordDays}}</li>
+          <li>记录的总分钟数：{{this.summary.minutesOfUserRecord}}</li>
+        </ul>
       </el-form>
+
     </div>
   </div>
 </template>
@@ -124,7 +124,6 @@ export default {
       let endDate = moment(this.endDate, "YYYY-MM-DD")
       let days = endDate.diff(beginDate, 'days') + 1   //计算总共多少天
       let daysMinutes = days * 24 * 60; //总共多少分钟
-      console.log("daysMinutes", daysMinutes)
       let recordDateMinutes = 0  //统计用户记录的分钟数
       let labelTimeMap = new Map()  //存放分钟数和标签
       this.charOption.series[0].data = this.charOption.series[0].data.slice(0,0)  //初始化
