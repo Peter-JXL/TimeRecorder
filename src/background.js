@@ -4,8 +4,6 @@ import { app, protocol, BrowserWindow,  Menu, globalShortcut, shell  } from 'ele
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import autoUpdater from './utils/update'
 
-
-
 const path = require('path')
 // import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer' 取消导入
 const isDevelopment = process.env.NODE_ENV !== 'production'

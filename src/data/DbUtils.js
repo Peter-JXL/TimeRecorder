@@ -83,8 +83,11 @@ function statOneDayTime(recordDate) {
 function statDasyTime(beginDate, endDate) {
     return knex.from('dataTable').
         select("ID", "recordDate", 'beginTime', 'endTime', 'firstLabel', 'secondLabel', 'timeNote').
-        whereBetween('recordDate', [beginDate, endDate]);
+        where('recordDate', '>=', beginDate).
+        andWhere('recordDate', '<=', endDate)
 }
+
+
 export default {
     getFirstLabel,
     getSecondLabel,
