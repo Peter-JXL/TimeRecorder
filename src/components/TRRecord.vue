@@ -33,7 +33,7 @@
 
     <div id="TRRecordRight">
       <el-form-item>
-        <el-calendar id='customizedCalendar'  v-model="caldayChoose" />
+        <el-calendar id='customizedCalendar'  v-model="caldayChoose"></el-calendar>
       </el-form-item>
       <el-form-item id="button">
         <el-button @click="skip('preYear')" type="success" round size="small">←年</el-button>
@@ -353,7 +353,19 @@ export default {
   }
 }
 
+
+
 #customizedCalendar {
+  #selectP {
+    width: 30px;
+    height: 30px;
+    background-color: #15ff2c;
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+
+
   :deep(.el-calendar__header)  {
     // 修改头部背景颜色
     background-color: #57617c;
@@ -395,7 +407,6 @@ export default {
         p {
           // 选中日期颜色
           color: black;
-          background-color: blue;
         }
       }
     }
