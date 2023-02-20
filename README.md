@@ -14,30 +14,26 @@
 
 记录界面：可以选择日期并插入时间段
 
-![](https://image.peterjxl.com/TimeRecorder/TimeRecorder-record.jpg)
-
-
-原本的图床：
-![](https://s3.uuu.ovh/imgs/2022/12/03/3c2a0621ae935f0d.jpg)
+![](./docs/assets/TimeRecorder-record.jpg)
 
 
 
 
 每日统计界面：可以统计每一天的记录时间情况。当有漏记录的或多记录的都会显示
 
-![](https://image.peterjxl.com/TimeRecorder/TimeRecorder-analyze.jpg)
+![](./docs/assets/TimeRecorder-analyze.jpg)
 
 
 
 标签管理：可以添加和删除标签，修改标签信息等
 
-![](https://image.peterjxl.com/TimeRecorder/TimeRecorder-label.jpg)
+![](./docs/assets/TimeRecorder-label.jpg)
 
 
 
 统计：可以统计一段时间的记录时间情况
 
-![](https://image.peterjxl.com/TimeRecorder/TimeRecorder-summary.jpg)
+![](./docs/assets/TimeRecorder-summary.jpg)
 
 ## 参与开发
 
