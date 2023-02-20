@@ -17,6 +17,11 @@
 ![](https://image.peterjxl.com/TimeRecorder/TimeRecorder-record.jpg)
 
 
+原本的图床：
+![](https://s3.uuu.ovh/imgs/2022/12/03/3c2a0621ae935f0d.jpg)
+
+
+
 
 每日统计界面：可以统计每一天的记录时间情况。当有漏记录的或多记录的都会显示
 
